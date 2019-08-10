@@ -43,9 +43,14 @@ def get_args():
 
     check_or_create_dir(args.save_to, critical=True)
 
-    if not (0 < args.iou_th <= 1.0):
+    if not (0 < args.iou_th <= 1):
         print('Bad value for "--iou-th": it must be in range (0; 1].')
         exit(1)
+
+    if args.train_ratio is not None:
+        if not (0 < args.train_ratio < 1):
+            print('Bad value for "--train-ratio": it must be in range (0; 1).')
+            exit(1)
 
     return args
 
@@ -218,13 +223,24 @@ def main():
             )
 
     # save prepared markup
-    with open(os.path.join(args.save_to, 'markup.json'), 'w') as f:
-        markup = []
-        for path, cur_lb, cur_bb in zip(img_paths, labels, bboxes):
-            ant = [{'label': lb, 'bbox': bb} for lb, bb in zip(cur_lb, cur_bb)]
-            markup.append({'img_path': path, 'annotation': ant})
+    markup = []
+    for path, cur_lb, cur_bb in zip(img_paths, labels, bboxes):
+        annot = [{'label': lb, 'bbox': bb} for lb, bb in zip(cur_lb, cur_bb)]
+        markup.append({'img_path': path, 'annotation': annot})
 
-        json.dump(markup, fp=f, indent=4)
+    if args.train_ratio is None:
+        with open(os.path.join(args.save_to, 'markup.json'), 'w') as f:
+            json.dump(markup, fp=f, indent=4)
+    else:
+        indices = np.arange(len(markup))
+        np.random.shuffle(indices)
+
+        train_size = int(len(markup) * args.train_ratio)
+        with open(os.path.join(args.save_to, 'train.json'), 'w') as f:
+            json.dump(markup[:train_size], fp=f, indent=4)
+
+        with open(os.path.join(args.save_to, 'test.json'), 'w') as f:
+            json.dump(markup[train_size:], fp=f, indent=4)
 
     if args.visualize:
         vis_images = os.path.join(args.save_to, 'vis_images')
