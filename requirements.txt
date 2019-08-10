@@ -2,3 +2,5 @@ configargparse
 xmltodict
 opencv-python
 tqdm
+numpy
+pandas
