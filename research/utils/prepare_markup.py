@@ -21,6 +21,8 @@ def get_args():
     parser = configargparse.ArgumentParser(
         description='Script for hdf5-files generation with dataset.'
     )
+    parser.add_argument('--config', is_config_file=True,
+                        help='Path to config file.')
     parser.add_argument('--images-dir', required=True,
                         help='Path to dir with images.')
     parser.add_argument('--markup-dir', required=True,
@@ -119,19 +121,22 @@ def save_markup_as_yolov3(img_paths,
                           sizes,
                           save_to,
                           train_ratio):
-    """
-    
+    """Prepare and save markup for YOLOv3.
+
     Parameters
     ----------
-    img_paths
-    labels
-    bboxes
-    sizes
-    save_to
-    train_ratio
-
-    Returns
-    -------
+    img_paths : array-like
+        Array with images paths.
+    labels : array-like
+        Array with arrays of labels for every image.
+    bboxes : array-like
+        Array with arrays of bounding boxes for every image.
+    sizes : array-like
+        Array with size for every image.
+    save_to : str
+        Part to saving folder.
+    train_ratio : float
+        Splitting ratio in range (0; 1).
 
     """
     # split in train/test
@@ -140,7 +145,22 @@ def save_markup_as_yolov3(img_paths,
     # save images paths
     for phase, paths in zip(['train', 'test'], splitted_paths):
         with open(os.path.join(save_to, phase + '.txt'), 'w') as f:
-            [print(os.path.basename(path), file=f) for path in paths]
+            [print(path, file=f) for path in paths]
+
+    # save classes.name
+    classes_path = os.path.join(save_to, 'classes.name')
+    with open(classes_path, 'w') as f:
+        print('normal', file=f)
+        print('anomaly', file=f)
+
+    # save main description file
+    train_path = os.path.join(save_to, 'train.txt')
+    test_path = os.path.join(save_to, 'test.txt')
+    with open(os.path.join(save_to, 'custom.data'), 'w') as f:
+        print('classes= 2', file=f)
+        print('train=' + train_path, file=f)
+        print('valid=' + test_path, file=f)
+        print('names=' + classes_path, file=f)
 
     # process and save labels
     labels_dir = os.path.join(save_to, 'labels')
