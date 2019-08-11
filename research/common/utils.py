@@ -15,7 +15,7 @@ def check_or_create_dir(path, critical=False):
     """
     if not os.path.exists(path):
         try:
-            os.mkdir(path)
+            os.makedirs(path, exist_ok=True)
         except FileNotFoundError:
             err_desc = 'can\'t find or create the path: ' + path
             if critical:
