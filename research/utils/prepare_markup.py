@@ -36,6 +36,9 @@ def get_args():
                         help='Search and remove overlapped bounding boxes.')
     parser.add_argument('--iou-th', type=float, default=0.65,
                         help='IoU threshold for bbox filtering.')
+    parser.add_argument('--markup-format', choices=['default', 'yolov3'],
+                        default='default',
+                        help='Format of resulted markup.')
     parser.add_argument('--verbose', action='store_true',
                         help='Print additional information.')
 
@@ -53,6 +56,106 @@ def get_args():
             exit(1)
 
     return args
+
+
+def split_by_ratio(array, ratio):
+    """Randomly split array in two parts.
+
+    Parameters
+    ----------
+    array : array-like
+        Array for splitting.
+    ratio : float
+        Splitting ratio in range (0; 1).
+
+    Returns
+    -------
+    tuple
+        Two randomly splitted arrays.
+
+    """
+    indices = np.arange(len(array))
+    np.random.shuffle(indices)
+
+    size = int(len(array) * ratio)
+    return array[:size], array[size:]
+
+
+def convert_bbox_to_yolov3(bbox, img_size):
+    """Convert coordinates to yolov3 markup format.
+
+    Parameters
+    ----------
+    bbox : array-like
+        Array with 4 ints [x_min, y_min, x_max, y_max].
+    img_size : dict
+        Dict with image width and height.
+
+    Returns
+    -------
+    List
+        Converted bounding box data.
+
+    """
+    width = bbox[2] - bbox[0]
+    height = bbox[3] - bbox[1]
+    x_center = bbox[0] + width / 2  # center by width
+    y_center = bbox[1] + height / 2  # center by height
+
+    # normalize
+    x_center /= img_size['width']
+    y_center /= img_size['height']
+    width /= img_size['width']
+    height /= img_size['height']
+
+    ints = [x_center, y_center, width, height]
+    # cast to str for right serialization
+    return [str(x) for x in ints]
+
+
+def save_markup_as_yolov3(img_paths,
+                          labels,
+                          bboxes,
+                          sizes,
+                          save_to,
+                          train_ratio):
+    """
+    
+    Parameters
+    ----------
+    img_paths
+    labels
+    bboxes
+    sizes
+    save_to
+    train_ratio
+
+    Returns
+    -------
+
+    """
+    # split in train/test
+    splitted_paths = split_by_ratio(img_paths, train_ratio)
+
+    # save images paths
+    for phase, paths in zip(['train', 'test'], splitted_paths):
+        with open(os.path.join(save_to, phase + '.txt'), 'w') as f:
+            [print(os.path.basename(path), file=f) for path in paths]
+
+    # process and save labels
+    labels_dir = os.path.join(save_to, 'labels')
+    os.makedirs(labels_dir, exist_ok=True)
+    for path, cur_lbs, cur_bbs, size in zip(img_paths, labels, bboxes, sizes):
+        # change extention to .txt
+        cur_name = '.'.join(os.path.basename(path).split('.')[:-1] + ['txt'])
+
+        # process and save labels and bboxes for current image name
+        with open(os.path.join(labels_dir, cur_name), 'w') as f:
+            for label, bbox in zip(cur_lbs, cur_bbs):
+                converted_bbox = convert_bbox_to_yolov3(bbox, size)
+                # prepare text line
+                line = ' '.join([str(int(label))] + converted_bbox)
+                print(line, file=f)
 
 
 def calc_iou_bbox(box_1, box_2):
@@ -147,9 +250,10 @@ def main():
     good_for_markup_value = 'Визуализируются (можно размечать)'
     zero_label = 'shejnyj-mezhpozvonochnyj-disk-zdorovyj'
 
-    img_paths, labels, bboxes = [], [], []
+    img_paths, labels, bboxes, sizes = [], [], [], []
     total_samples = 0
 
+    # collect and parse source markup
     for mkp_name in os.listdir(args.markup_dir):
         mkp_path = os.path.join(args.markup_dir, mkp_name)
         df = pd.read_csv(mkp_path)
@@ -175,13 +279,16 @@ def main():
 
                 # extract labels and bboxes
                 if 'annotation' in xml.keys():
-                    objs = xml['annotation']['object']
+                    annot = xml['annotation']
                 else:
-                    objs = xml['annotationgroup']['annotation']['object']
+                    annot = xml['annotationgroup']['annotation']
+
+                sizes.append({'height': int(annot['imagesize']['nrows']),
+                              'width': int(annot['imagesize']['ncols'])})
 
                 cur_labels = []
                 cur_bb = []
-                for obj in objs:
+                for obj in annot['object']:
                     # store label
                     if obj['name'] == zero_label:
                         cur_labels.append(False)
@@ -224,28 +331,29 @@ def main():
 
     # save prepared markup
     markup = []
-    for path, cur_lb, cur_bb in zip(img_paths, labels, bboxes):
-        annot = [{'label': lb, 'bbox': bb} for lb, bb in zip(cur_lb, cur_bb)]
-        markup.append({'img_path': path, 'annotation': annot})
-
-    if args.train_ratio is None:
-        with open(os.path.join(args.save_to, 'markup.json'), 'w') as f:
-            json.dump(markup, fp=f, indent=4)
+    if args.markup_format == 'yolov3':
+        save_markup_as_yolov3(
+            img_paths, labels, bboxes, sizes, args.save_to, args.train_ratio
+        )
     else:
-        indices = np.arange(len(markup))
-        np.random.shuffle(indices)
+        for path, cur_lb, cur_bb in zip(img_paths, labels, bboxes):
+            annot = [{'label': lb, 'bbox': bb}
+                     for lb, bb in zip(cur_lb, cur_bb)]
+            markup.append({'img_path': path, 'annotation': annot})
 
-        train_size = int(len(markup) * args.train_ratio)
-        with open(os.path.join(args.save_to, 'train.json'), 'w') as f:
-            json.dump(markup[:train_size], fp=f, indent=4)
+        if args.train_ratio is None:
+            with open(os.path.join(args.save_to, 'markup.json'), 'w') as f:
+                json.dump(markup, fp=f, indent=4)
+        else:
+            splitted_markup = split_by_ratio(markup, args.train_ratio)
+            for ph, mkp in zip(['train', 'test'], splitted_markup):
+                with open(os.path.join(args.save_to, ph + '.json'), 'w') as f:
+                    json.dump(mkp, fp=f, indent=4)
 
-        with open(os.path.join(args.save_to, 'test.json'), 'w') as f:
-            json.dump(markup[train_size:], fp=f, indent=4)
-
+    # visualization
     if args.visualize:
         vis_images = os.path.join(args.save_to, 'vis_images')
-        if not os.path.exists(vis_images):
-            os.mkdir(vis_images)
+        os.makedirs(vis_images, exist_ok=True)
 
         print('\nVisualizing:')
         for img_path, cur_lbs, cur_bb in tqdm(zip(img_paths, labels, bboxes)):
