@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os
-import sys
 import cv2
 import json
 import xmltodict
@@ -11,9 +10,6 @@ import numpy as np
 import pandas as pd
 
 from tqdm import tqdm
-
-sys.path.append(os.path.join(sys.path[0], '../common'))
-from utils import check_or_create_dir
 
 
 def get_args():
@@ -43,10 +39,12 @@ def get_args():
                         help='Format of resulted markup.')
     parser.add_argument('--verbose', action='store_true',
                         help='Print additional information.')
+    parser.add_argument('--calc-mean-std', action='store_true',
+                        help='Calculate mean and std on given images.')
 
     args = parser.parse_args()
 
-    check_or_create_dir(args.save_to, critical=True)
+    os.makedirs(args.save_to, exist_ok=True)
 
     if not (0 < args.iou_th <= 1):
         print('Bad value for "--iou-th": it must be in range (0; 1].')
@@ -156,14 +154,15 @@ def save_markup_as_yolov3(img_paths,
     # save main description file
     train_path = os.path.join(save_to, 'train.txt')
     test_path = os.path.join(save_to, 'test.txt')
+    labels_dir = os.path.join(save_to, 'labels')
     with open(os.path.join(save_to, 'custom.data'), 'w') as f:
         print('classes= 2', file=f)
         print('train=' + train_path, file=f)
         print('valid=' + test_path, file=f)
         print('names=' + classes_path, file=f)
+        print('labels=' + labels_dir, file=f)
 
     # process and save labels
-    labels_dir = os.path.join(save_to, 'labels')
     os.makedirs(labels_dir, exist_ok=True)
     for path, cur_lbs, cur_bbs, size in zip(img_paths, labels, bboxes, sizes):
         # change extention to .txt
@@ -260,6 +259,35 @@ def filter_bboxes_by_iou(bboxes, labels, iou_th=0.65, verbose=False):
             print('\nNo intersected polygons.')
 
     return new_bboxes, new_labels
+
+
+def calc_mean_std(images_dir):
+    r_px = []
+    g_px = []
+    b_px = []
+    gray_px = []
+    for name in tqdm(os.listdir(images_dir), desc='Collecting pixels'):
+        img_path = os.path.join(images_dir, name)
+
+        img = cv2.imread(img_path)
+        r_px += img[:, :, 2].ravel().tolist()
+        g_px += img[:, :, 1].ravel().tolist()
+        b_px += img[:, :, 0].ravel().tolist()
+
+        img = cv2.imread(img_path, 0)
+        gray_px += img.ravel().tolist()
+
+    print('Processing pixels...')
+    r_px = np.array(r_px)
+    g_px = np.array(g_px)
+    b_px = np.array(b_px)
+    gray_px = np.array(gray_px)
+
+    for arr, name in zip([r_px, g_px, b_px, gray_px],
+                         ['Red', 'Green', 'Blue', 'Gray']):
+        print('\n{}:\nMean: {}\nSTD: {}'.format(
+            name, arr.mean() / 255, arr.std() / 255
+        ))
 
 
 def main():
@@ -369,6 +397,9 @@ def main():
             for ph, mkp in zip(['train', 'test'], splitted_markup):
                 with open(os.path.join(args.save_to, ph + '.json'), 'w') as f:
                     json.dump(mkp, fp=f, indent=4)
+
+    if args.calc_mean_std:
+        calc_mean_std(args.images_dir)
 
     # visualization
     if args.visualize:

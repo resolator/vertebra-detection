@@ -4,3 +4,5 @@ opencv-python
 tqdm
 numpy
 pandas
+torch
+torchvision
