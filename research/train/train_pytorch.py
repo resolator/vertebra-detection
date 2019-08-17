@@ -3,14 +3,37 @@
 import os
 import configargparse
 
-import torch
-import torch.nn as nn
-import torch.optim as optim
+import numpy as np
+import tensorflow as tf
 
-from torchvision import transforms, models
+from math import isfinite
+from tqdm import tqdm
+
+import torch
+import torch.optim as optim
 from torch.utils.data import DataLoader
 
+from torchvision import transforms, models
+from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
+
 from vertebra_dataset import *
+from metrics import *
+
+
+class Logger(object):
+    def __init__(self, log_dir):
+        """Create a summary writer logging to log_dir."""
+        self.writer = tf.compat.v1.summary.FileWriter(log_dir)
+
+    def scalar_summary(self, tag, value, step):
+        """Log a scalar variable."""
+        summary = tf.compat.v1.Summary(value=[tf.compat.v1.Summary.Value(tag=tag, simple_value=value)])
+        self.writer.add_summary(summary, step)
+
+    def list_of_scalars_summary(self, tag_value_pairs, step):
+        """Log scalar variables."""
+        summary = tf.compat.v1.Summary(value=[tf.compat.v1.Summary.Value(tag=tag, simple_value=value) for tag, value in tag_value_pairs])
+        self.writer.add_summary(summary, step)
 
 
 def get_args():
@@ -26,10 +49,17 @@ def get_args():
                         help='Path to train.json file.')
     parser.add_argument('--save-to', required=True,
                         help='Path to saving dir.')
+    parser.add_argument('--epochs', type=int,
+                        help='Number of epochs '
+                             '(if not set then train forever.)')
     parser.add_argument('--bs', type=int, default=2,
                         help='Size of batch.')
     parser.add_argument('--lr', type=float, default=1e-3,
                         help='Learning rate.')
+    parser.add_argument('--momentum', type=float, default=0.9,
+                        help='Momentum for optimizer.')
+    parser.add_argument('--weight-decay', type=float, default=1e-4,
+                        help='Weight decay for optimizer.')
     parser.add_argument('--crop-factor', type=float, default=0.1,
                         help='Crop factor part of image\'s top-left.')
     parser.add_argument('--h-flip-prob', type=float, default=0.5,
@@ -58,16 +88,99 @@ def get_args():
     return args
 
 
+def collate_fn(batch):
+    return tuple(zip(*batch))
+
+
+def warmup_lr_scheduler(optimizer, warmup_iters, warmup_factor):
+
+    def f(x):
+        if x >= warmup_iters:
+            return 1
+        alpha = float(x) / warmup_iters
+        return warmup_factor * (1 - alpha) + alpha
+
+    return optim.lr_scheduler.LambdaLR(optimizer, f)
+
+
+def train_one_epoch(model, optimizer, loader, device, ep, logger):
+    model.train()
+    lr_scheduler = None
+    if ep == 0:
+        warmup_factor = 1. / 1000
+        warmup_iters = min(1000, len(loader) - 1)
+
+        lr_scheduler = warmup_lr_scheduler(
+            optimizer, warmup_iters, warmup_factor
+        )
+
+    cycle = tqdm(loader, desc=f'Training... (Epoch #{ep})')
+    ep_losses = []
+    for images, targets in cycle:
+        images = list(image.to(device) for image in images)
+        targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
+
+        loss_dict = model(images, targets)
+        losses = sum(loss for loss in loss_dict.values())
+        loss_value = losses.item()
+        cycle.set_postfix({'Loss:': loss_value})
+        ep_losses.append(loss_value)
+
+        if not isfinite(loss_value):
+            print("\n\nLoss is {}".format(loss_value))
+            [print(f'{k}: {v}') for k, v in loss_dict.items()]
+            # exit(1)
+
+        optimizer.zero_grad()
+        losses.backward()
+        optimizer.step()
+
+        if lr_scheduler is not None:
+            lr_scheduler.step(ep)
+
+    ep_loss = sum(ep_losses) / len(ep_losses)
+    logger.scalar_summary('loss', ep_loss, ep)
+
+
+@torch.no_grad()
+def evaluate_one_epoch(model, loader, device, ep, logger, iou_th=0.5):
+    cpu_device = torch.device('cpu')
+    model.eval()
+
+    metrics_names = ['precision', 'recall', 'f1', 'iou']
+
+    metrics = np.zeros(len(metrics_names))
+    for image, target in tqdm(loader, desc=f'Testing... (Epoch #{ep})'):
+        image = list(img.to(device) for img in image)
+
+        output = model(image)
+
+        output = [{k: v.to(cpu_device).numpy()
+                   for k, v in t.items()} for t in output]
+
+        target = [{k: v.to(cpu_device).numpy()
+                   for k, v in t.items()} for t in target]
+
+        metrics += calc_metrics(output, target, iou_th)
+
+    for m_name, m_sum in zip(metrics_names, metrics):
+        logger.scalar_summary(m_name, m_sum / len(loader), ep)
+
+
 def main():
     """Application entry point."""
     args = get_args()
 
+    tb_dir = os.path.join(args.save_to, 'logs')
+    os.makedirs(tb_dir, exist_ok=True)
+    logger = Logger(tb_dir)
+
     # data processing preparation
     train_transforms = transforms.Compose([
         BottomRightCrop(args.crop_factor),
-        Resize(224, 224),
-        RandomHorizontalFlip(args.h_flip_prob),
-        RandomVerticalFlip(args.v_flip_prob),
+        # Resize(224, 224),
+        # RandomHorizontalFlip(args.h_flip_prob),
+        # RandomVerticalFlip(args.v_flip_prob),
         ToTensor(),
         Normalize(mean=args.mean, std=args.std)
     ])
@@ -85,13 +198,15 @@ def main():
         dataset=train_ds,
         batch_size=args.bs,
         shuffle=True,
-        num_workers=args.loader_workers
+        num_workers=args.loader_workers,
+        collate_fn=collate_fn
     )
     test_loader = DataLoader(
         dataset=test_ds,
         batch_size=args.bs,
         shuffle=False,
-        num_workers=args.loader_workers
+        num_workers=args.loader_workers,
+        collate_fn=collate_fn
     )
 
     # model definition
@@ -99,23 +214,33 @@ def main():
     if torch.cuda.is_available():
         device = torch.device('cuda')
 
-    model = models.detection.fasterrcnn_resnet50_fpn(
-        pretrained=False,
-        num_classes=2,
-        pretrained_backbone=args.pretrained_backbone
-    )
+    model = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
+    num_classes = 2
+    in_features = model.roi_heads.box_predictor.cls_score.in_features
+    # replace the pre-trained head with a new one
+    model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
+
     model.to(device)
 
     params = [p for p in model.parameters() if p.requires_grad]
-    optimizer = optim.Adam(params, lr=args.lr)
-    # criterion = nn.
+    # optimizer = optim.Adam(params, lr=args.lr)
+    optimizer = torch.optim.SGD(
+        params,
+        lr=args.lr,
+        momentum=args.momentum,
+        weight_decay=args.weight_decay
+    )
 
-    model.train()
-    for images, targets in train_loader:
-        images = list(image.to(device) for image in images)
-        targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
-        output = model(images, targets)
-        break
+    ep = 0
+    if args.epochs is None:
+        epochs = -1
+    else:
+        epochs = args.epochs
+
+    while ep != epochs:
+        train_one_epoch(model, optimizer, train_loader, device, ep, logger)
+        evaluate_one_epoch(model, test_loader, device, ep, logger)
+        ep += 1
 
 
 if __name__ == '__main__':
