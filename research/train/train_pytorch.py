@@ -27,12 +27,9 @@ class Logger(object):
 
     def scalar_summary(self, tag, value, step):
         """Log a scalar variable."""
-        summary = tf.compat.v1.Summary(value=[tf.compat.v1.Summary.Value(tag=tag, simple_value=value)])
-        self.writer.add_summary(summary, step)
-
-    def list_of_scalars_summary(self, tag_value_pairs, step):
-        """Log scalar variables."""
-        summary = tf.compat.v1.Summary(value=[tf.compat.v1.Summary.Value(tag=tag, simple_value=value) for tag, value in tag_value_pairs])
+        summary = tf.compat.v1.Summary(
+            value=[tf.compat.v1.Summary.Value(tag=tag, simple_value=value)]
+        )
         self.writer.add_summary(summary, step)
 
 
@@ -136,14 +133,18 @@ def train_one_epoch(model, optimizer, loader, device, ep, logger,
 
 
 @torch.no_grad()
-def evaluate_one_epoch(model, loader, device, ep, logger, iou_th=0.5):
+def evaluate_one_epoch(model,
+                       loader,
+                       device,
+                       ep,
+                       logger,
+                       m_names,
+                       best_metrics,
+                       iou_th=0.5):
     cpu_device = torch.device('cpu')
     model.eval()
 
-    m_names = ['precision', 'recall', 'f1', 'iou', 'matched_boxes']
-
     metrics = np.zeros(len(m_names))
-    best_metrics = np.zeros(len(m_names))
     for image, target in tqdm(loader, desc=f'Testing... (Epoch #{ep})'):
         image = list(img.to(device) for img in image)
 
@@ -157,6 +158,7 @@ def evaluate_one_epoch(model, loader, device, ep, logger, iou_th=0.5):
 
         metrics += calc_metrics(output, target, iou_th)
 
+    # metrics preparation and dumping
     metrics_for_save = []
     for idx, (m_name, m_sum, m_best) in enumerate(zip(
             m_names, metrics, best_metrics)):
@@ -169,6 +171,7 @@ def evaluate_one_epoch(model, loader, device, ep, logger, iou_th=0.5):
             best_metrics[idx] = m
             metrics_for_save.append(m_name)
 
+    print()
     return metrics_for_save
 
 
@@ -190,7 +193,6 @@ def main():
     ])
     test_transforms = transforms.Compose([
         BottomRightCrop(args.crop_factor),
-        Resize(224, 224),
         ToTensor(),
         Normalize(mean=args.mean, std=args.std),
     ])
@@ -258,11 +260,16 @@ def main():
             optimizer, warmup_iters, warmup_factor
         )
 
+    # metrics storage
+    m_names = ['precision', 'recall', 'f1', 'iou', 'matched_boxes']
+    best_metrics = np.zeros(len(m_names))
+
     # main train cycle
     while ep != epochs:
         train_one_epoch(model, optimizer, train_loader, device, ep, logger,
                         lr_scheduler)
-        save_model = evaluate_one_epoch(model, test_loader, device, ep, logger)
+        save_model = evaluate_one_epoch(
+            model, test_loader, device, ep, logger, m_names, best_metrics)
 
         if len(save_model) > 0:
             for m_name in save_model:
