@@ -58,9 +58,11 @@ class RandomHorizontalFlip(object):
     def __call__(self, sample):
         if random.random() < self.prob:
             sample['img'] = F.hflip(sample['img'])
-            sample['bboxes'] = [
-                [bb[2], bb[1], bb[0], bb[3]] for bb in sample['bboxes']
-            ]
+            h_size = sample['img'].size[1]
+            sample['bboxes'] = [[h_size - bb[0],
+                                 bb[1],
+                                 h_size - bb[2],
+                                 bb[3]] for bb in sample['bboxes']]
 
         return sample
 
@@ -72,9 +74,11 @@ class RandomVerticalFlip(object):
     def __call__(self, sample):
         if random.random() < self.prob:
             sample['img'] = F.vflip(sample['img'])
-            sample['bboxes'] = [
-                [bb[0], bb[3], bb[2], bb[1]] for bb in sample['bboxes']
-            ]
+            w_size = sample['img'].size[0]
+            sample['bboxes'] = [[bb[0],
+                                 w_size - bb[1],
+                                 bb[2],
+                                 w_size - bb[3]] for bb in sample['bboxes']]
 
         return sample
 
