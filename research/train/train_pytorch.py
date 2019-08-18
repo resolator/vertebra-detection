@@ -58,6 +58,8 @@ def get_args():
                         help='Learning rate.')
     parser.add_argument('--momentum', type=float, default=0.9,
                         help='Momentum for optimizer.')
+    parser.add_argument('--lr-decay', action='store_true',
+                        help='Enable LR decay.')
     parser.add_argument('--weight-decay', type=float, default=1e-4,
                         help='Weight decay for optimizer.')
     parser.add_argument('--crop-factor', type=float, default=0.1,
@@ -78,18 +80,16 @@ def get_args():
                         help='STD for normalization.')
     parser.add_argument('--loader-workers', type=int, default=1,
                         help='Num of threads for DataLoaders.')
-    parser.add_argument('--pretrained-backbone', action='store_true',
-                        help='Load weights for net backbone.')
+    parser.add_argument('--pretrained', action='store_true',
+                        help='Use pretrained FasterRCNN from torchvision.')
+    parser.add_argument('--optimizer', choices=['adam', 'sgd'], default='sgd',
+                        help='Optimizer.')
 
     args = parser.parse_args()
 
     os.makedirs(args.save_to, exist_ok=True)
 
     return args
-
-
-def collate_fn(batch):
-    return tuple(zip(*batch))
 
 
 def warmup_lr_scheduler(optimizer, warmup_iters, warmup_factor):
@@ -103,7 +103,8 @@ def warmup_lr_scheduler(optimizer, warmup_iters, warmup_factor):
     return optim.lr_scheduler.LambdaLR(optimizer, f)
 
 
-def train_one_epoch(model, optimizer, loader, device, ep, logger, lr_scheduler=None):
+def train_one_epoch(model, optimizer, loader, device, ep, logger,
+                    lr_scheduler=None):
     model.train()
 
     cycle = tqdm(loader, desc=f'Training... (Epoch #{ep})')
@@ -157,11 +158,13 @@ def evaluate_one_epoch(model, loader, device, ep, logger, iou_th=0.5):
         metrics += calc_metrics(output, target, iou_th)
 
     metrics_for_save = []
-    for idx, (m_name, m_sum, m_best) in enumerate(zip(m_names,
-                                                      metrics,
-                                                      best_metrics)):
+    for idx, (m_name, m_sum, m_best) in enumerate(zip(
+            m_names, metrics, best_metrics)):
         m = m_sum / len(loader)
+
+        print(f'Test {m_name}: {m}')
         logger.scalar_summary(m_name, m, ep)
+
         if m > m_best:
             best_metrics[idx] = m
             metrics_for_save.append(m_name)
@@ -180,9 +183,8 @@ def main():
     # data processing preparation
     train_transforms = transforms.Compose([
         BottomRightCrop(args.crop_factor),
-        # Resize(224, 224),
-        # RandomHorizontalFlip(args.h_flip_prob),
-        # RandomVerticalFlip(args.v_flip_prob),
+        RandomHorizontalFlip(args.h_flip_prob),
+        RandomVerticalFlip(args.v_flip_prob),
         ToTensor(),
         Normalize(mean=args.mean, std=args.std)
     ])
@@ -216,22 +218,30 @@ def main():
     if torch.cuda.is_available():
         device = torch.device('cuda')
 
-    model = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
     num_classes = 2
-    in_features = model.roi_heads.box_predictor.cls_score.in_features
-    # replace the pre-trained head with a new one
-    model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
-
+    if args.pretrained:
+        model = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
+        in_features = model.roi_heads.box_predictor.cls_score.in_features
+        model.roi_heads.box_predictor = FastRCNNPredictor(
+            in_features, num_classes
+        )
+    else:
+        model = models.detection.fasterrcnn_resnet50_fpn(
+            pretrained=False, num_classes=num_classes
+        )
     model.to(device)
-
     params = [p for p in model.parameters() if p.requires_grad]
-    # optimizer = optim.Adam(params, lr=args.lr)
-    optimizer = torch.optim.SGD(
-        params,
-        lr=args.lr,
-        momentum=args.momentum,
-        weight_decay=args.weight_decay
-    )
+
+    # optimizer definition
+    if args.optimizer == 'sgd':
+        optimizer = torch.optim.SGD(
+            params,
+            lr=args.lr,
+            momentum=args.momentum,
+            weight_decay=args.weight_decay
+        )
+    else:
+        optimizer = optim.Adam(params, lr=args.lr)
 
     ep = 0
     if args.epochs is None:
@@ -239,15 +249,19 @@ def main():
     else:
         epochs = args.epochs
 
-    warmup_factor = 1. / 1000
-    warmup_iters = min(1000, len(train_loader) - 1)
+    lr_scheduler = None
+    if args.lr_decay:
+        warmup_factor = 1. / 1000
+        warmup_iters = min(1000, len(train_loader) - 1)
 
-    lr_scheduler = warmup_lr_scheduler(
-        optimizer, warmup_iters, warmup_factor
-    )
+        lr_scheduler = warmup_lr_scheduler(
+            optimizer, warmup_iters, warmup_factor
+        )
 
+    # main train cycle
     while ep != epochs:
-        train_one_epoch(model, optimizer, train_loader, device, ep, logger, lr_scheduler)
+        train_one_epoch(model, optimizer, train_loader, device, ep, logger,
+                        lr_scheduler)
         save_model = evaluate_one_epoch(model, test_loader, device, ep, logger)
 
         if len(save_model) > 0:
