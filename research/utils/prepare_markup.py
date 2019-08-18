@@ -13,13 +13,13 @@ import pandas as pd
 from tqdm import tqdm
 
 sys.path.append(os.path.join(sys.path[0], '../common'))
-from utils import calc_iou_bbox
+from utils import calc_iou_bbox, draw_bboxes
 
 
 def get_args():
     """Arguments parser."""
     parser = configargparse.ArgumentParser(
-        description='Script for hdf5-files generation with dataset.'
+        description='Script for markup preparation.'
     )
     parser.add_argument('--config', is_config_file=True,
                         help='Path to config file.')
@@ -384,16 +384,7 @@ def main():
         print('\nVisualizing:')
         for img_path, cur_lbs, cur_bb in tqdm(zip(img_paths, labels, bboxes)):
             img = cv2.imread(img_path)
-
-            # drawing bboxes
-            for label, bb in zip(cur_lbs, cur_bb):
-                pts = np.array([[bb[0], bb[1]],
-                                [bb[0], bb[3]],
-                                [bb[2], bb[3]],
-                                [bb[2], bb[1]]], np.int32)
-                pts = pts.reshape((-1, 1, 2))
-                color = (0, 0, 255) if label else (0, 255, 0)
-                img = cv2.polylines(img, [pts], True, color)
+            img = draw_bboxes(img, cur_bb, cur_lbs)
 
             cv2.imwrite(
                 os.path.join(vis_images, os.path.basename(img_path)),

@@ -119,7 +119,7 @@ class VertebraDataset(Dataset):
         return len(self.samples)
 
     def __getitem__(self, idx):
-        labels = [int(x['label']) for x in self.samples[idx]['annotation']]
+        labels = [int(x['label']) + 1 for x in self.samples[idx]['annotation']]
         bboxes = [x['bbox'] for x in self.samples[idx]['annotation']]
         img = Image.open(self.samples[idx]['img_path'])
         sample = {'img': img, 'bboxes': bboxes, 'labels': labels}

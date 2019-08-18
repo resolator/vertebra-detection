@@ -1,6 +1,36 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import cv2
 import torch
+
+import numpy as np
+
+
+def bb2pts(bb):
+    pts = np.array([[bb[0], bb[1]],
+                    [bb[0], bb[3]],
+                    [bb[2], bb[3]],
+                    [bb[2], bb[1]]], np.int32)
+
+    return pts.reshape((-1, 1, 2))
+
+
+def draw_bboxes(img, bboxes, labels, from_tensor=False):
+    if from_tensor:
+        img = (img * 255).astype(np.uint8)
+    for box, label in zip(bboxes, labels):
+        pts = bb2pts(box)
+        if from_tensor:
+            color = (255, 0, 0) if label == 2 else (0, 255, 0)
+        else:
+            color = (0, 0, 255) if label else (0, 255, 0)
+        img = cv2.polylines(img, [pts], True, color)
+
+    if from_tensor:
+        if isinstance(img, cv2.UMat):
+            img = img.get()
+        return (img / 255).astype(np.float32)
+    return img
 
 
 def calc_iou_bbox(box_1, box_2, tensors=False):

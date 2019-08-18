@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os
+import sys
+import cv2
 import configargparse
 
 import numpy as np
-import tensorflow as tf
 
 from math import isfinite
 from tqdm import tqdm
@@ -12,25 +13,15 @@ from tqdm import tqdm
 import torch
 import torch.optim as optim
 from torch.utils.data import DataLoader
-
+from torch.utils.tensorboard import SummaryWriter
 from torchvision import transforms, models
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 
 from vertebra_dataset import *
 from metrics import *
 
-
-class Logger(object):
-    def __init__(self, log_dir):
-        """Create a summary writer logging to log_dir."""
-        self.writer = tf.compat.v1.summary.FileWriter(log_dir)
-
-    def scalar_summary(self, tag, value, step):
-        """Log a scalar variable."""
-        summary = tf.compat.v1.Summary(
-            value=[tf.compat.v1.Summary.Value(tag=tag, simple_value=value)]
-        )
-        self.writer.add_summary(summary, step)
+sys.path.append(os.path.join(sys.path[0], '../common'))
+from utils import draw_bboxes
 
 
 def get_args():
@@ -100,11 +91,11 @@ def warmup_lr_scheduler(optimizer, warmup_iters, warmup_factor):
     return optim.lr_scheduler.LambdaLR(optimizer, f)
 
 
-def train_one_epoch(model, optimizer, loader, device, ep, logger,
+def train_one_epoch(model, optimizer, loader, device, ep, writer,
                     lr_scheduler=None):
     model.train()
 
-    cycle = tqdm(loader, desc=f'Training... (Epoch #{ep})')
+    cycle = tqdm(loader, desc=f'Training {ep}')
     ep_losses = []
     for images, targets in cycle:
         images = list(image.to(device) for image in images)
@@ -129,7 +120,7 @@ def train_one_epoch(model, optimizer, loader, device, ep, logger,
             lr_scheduler.step(ep)
 
     ep_loss = sum(ep_losses) / len(ep_losses)
-    logger.scalar_summary('loss', ep_loss, ep)
+    writer.add_scalar('Loss/train', ep_loss, ep)
 
 
 @torch.no_grad()
@@ -137,26 +128,55 @@ def evaluate_one_epoch(model,
                        loader,
                        device,
                        ep,
-                       logger,
+                       writer,
                        m_names,
                        best_metrics,
+                       std,
+                       mean,
                        iou_th=0.5):
     cpu_device = torch.device('cpu')
     model.eval()
 
+    batch_num = np.random.randint(0, len(loader) - 1)
     metrics = np.zeros(len(m_names))
-    for image, target in tqdm(loader, desc=f'Testing... (Epoch #{ep})'):
-        image = list(img.to(device) for img in image)
-
-        output = model(image)
+    for idx, (images, target) in tqdm(enumerate(loader),
+                                      desc=f'Testing {ep}', total=len(loader)):
+        images = list(img.to(device) for img in images)
+        output = model(images)
 
         output = [{k: v.to(cpu_device).numpy()
                    for k, v in t.items()} for t in output]
-
         target = [{k: v.to(cpu_device).numpy()
                    for k, v in t.items()} for t in target]
 
         metrics += calc_metrics(output, target, iou_th)
+
+        # draw random image
+        if idx == batch_num:
+            sample_idx = np.random.randint(0, len(images) - 1)
+
+            tensor_img = images[sample_idx].detach()
+            # denormalize
+            for t, m, s in zip(tensor_img, mean, std):
+                t.mul_(s).add_(m)
+
+            # convert to cv2 format
+            img = tensor_img.cpu().numpy().transpose((1, 2, 0))
+
+            gt_img = draw_bboxes(
+                img.copy(),
+                target[sample_idx]['boxes'],
+                target[sample_idx]['labels'],
+                from_tensor=True
+            )
+            pd_img = draw_bboxes(
+                img,
+                output[sample_idx]['boxes'],
+                output[sample_idx]['labels'],
+                from_tensor=True
+            )
+            writer.add_image('Test/gt_image', gt_img, ep, dataformats='HWC')
+            writer.add_image('Test/pd_image', pd_img, ep, dataformats='HWC')
 
     # metrics preparation and dumping
     metrics_for_save = []
@@ -165,7 +185,7 @@ def evaluate_one_epoch(model,
         m = m_sum / len(loader)
 
         print(f'Test {m_name}: {m}')
-        logger.scalar_summary(m_name, m, ep)
+        writer.add_scalar('Test/' + m_name, m, ep)
 
         if m > m_best:
             best_metrics[idx] = m
@@ -179,9 +199,9 @@ def main():
     """Application entry point."""
     args = get_args()
 
-    tb_dir = os.path.join(args.save_to, 'logs')
-    os.makedirs(tb_dir, exist_ok=True)
-    logger = Logger(tb_dir)
+    logs_path = os.path.join(args.save_to, 'logs')
+    os.makedirs(logs_path, exist_ok=True)
+    writer = SummaryWriter(logs_path)
 
     # data processing preparation
     train_transforms = transforms.Compose([
@@ -220,7 +240,7 @@ def main():
     if torch.cuda.is_available():
         device = torch.device('cuda')
 
-    num_classes = 2
+    num_classes = 3
     if args.pretrained:
         model = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
         in_features = model.roi_heads.box_predictor.cls_score.in_features
@@ -266,10 +286,19 @@ def main():
 
     # main train cycle
     while ep != epochs:
-        train_one_epoch(model, optimizer, train_loader, device, ep, logger,
+        train_one_epoch(model, optimizer, train_loader, device, ep, writer,
                         lr_scheduler)
         save_model = evaluate_one_epoch(
-            model, test_loader, device, ep, logger, m_names, best_metrics)
+            model,
+            test_loader,
+            device,
+            ep,
+            writer,
+            m_names,
+            best_metrics,
+            args.std,
+            args.mean
+        )
 
         if len(save_model) > 0:
             for m_name in save_model:
