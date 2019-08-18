@@ -9,6 +9,10 @@ from torch.utils.data import Dataset
 from torchvision.transforms import functional as F
 
 
+def collate_fn(batch):
+    return tuple(zip(*batch))
+
+
 class Resize(object):
     def __init__(self, width, height):
         self.width = width
@@ -59,9 +63,9 @@ class RandomHorizontalFlip(object):
         if random.random() < self.prob:
             sample['img'] = F.hflip(sample['img'])
             h_size = sample['img'].size[1]
-            sample['bboxes'] = [[h_size - bb[0],
+            sample['bboxes'] = [[h_size - bb[2],
                                  bb[1],
-                                 h_size - bb[2],
+                                 h_size - bb[0],
                                  bb[3]] for bb in sample['bboxes']]
 
         return sample
@@ -76,9 +80,9 @@ class RandomVerticalFlip(object):
             sample['img'] = F.vflip(sample['img'])
             w_size = sample['img'].size[0]
             sample['bboxes'] = [[bb[0],
-                                 w_size - bb[1],
+                                 w_size - bb[3],
                                  bb[2],
-                                 w_size - bb[3]] for bb in sample['bboxes']]
+                                 w_size - bb[1]] for bb in sample['bboxes']]
 
         return sample
 
