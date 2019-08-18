@@ -103,16 +103,8 @@ def warmup_lr_scheduler(optimizer, warmup_iters, warmup_factor):
     return optim.lr_scheduler.LambdaLR(optimizer, f)
 
 
-def train_one_epoch(model, optimizer, loader, device, ep, logger):
+def train_one_epoch(model, optimizer, loader, device, ep, logger, lr_scheduler=None):
     model.train()
-    lr_scheduler = None
-    if ep == 0:
-        warmup_factor = 1. / 1000
-        warmup_iters = min(1000, len(loader) - 1)
-
-        lr_scheduler = warmup_lr_scheduler(
-            optimizer, warmup_iters, warmup_factor
-        )
 
     cycle = tqdm(loader, desc=f'Training... (Epoch #{ep})')
     ep_losses = []
@@ -147,9 +139,10 @@ def evaluate_one_epoch(model, loader, device, ep, logger, iou_th=0.5):
     cpu_device = torch.device('cpu')
     model.eval()
 
-    metrics_names = ['precision', 'recall', 'f1', 'iou']
+    m_names = ['precision', 'recall', 'f1', 'iou', 'matched_boxes']
 
-    metrics = np.zeros(len(metrics_names))
+    metrics = np.zeros(len(m_names))
+    best_metrics = np.zeros(len(m_names))
     for image, target in tqdm(loader, desc=f'Testing... (Epoch #{ep})'):
         image = list(img.to(device) for img in image)
 
@@ -163,8 +156,17 @@ def evaluate_one_epoch(model, loader, device, ep, logger, iou_th=0.5):
 
         metrics += calc_metrics(output, target, iou_th)
 
-    for m_name, m_sum in zip(metrics_names, metrics):
-        logger.scalar_summary(m_name, m_sum / len(loader), ep)
+    metrics_for_save = []
+    for idx, (m_name, m_sum, m_best) in enumerate(zip(m_names,
+                                                      metrics,
+                                                      best_metrics)):
+        m = m_sum / len(loader)
+        logger.scalar_summary(m_name, m, ep)
+        if m > m_best:
+            best_metrics[idx] = m
+            metrics_for_save.append(m_name)
+
+    return metrics_for_save
 
 
 def main():
@@ -237,9 +239,27 @@ def main():
     else:
         epochs = args.epochs
 
+    warmup_factor = 1. / 1000
+    warmup_iters = min(1000, len(train_loader) - 1)
+
+    lr_scheduler = warmup_lr_scheduler(
+        optimizer, warmup_iters, warmup_factor
+    )
+
     while ep != epochs:
-        train_one_epoch(model, optimizer, train_loader, device, ep, logger)
-        evaluate_one_epoch(model, test_loader, device, ep, logger)
+        train_one_epoch(model, optimizer, train_loader, device, ep, logger, lr_scheduler)
+        save_model = evaluate_one_epoch(model, test_loader, device, ep, logger)
+
+        if len(save_model) > 0:
+            for m_name in save_model:
+                torch.save(
+                    {'model': model.state_dict(),
+                     'optimizer': optimizer.state_dict(),
+                     'lr_scheduler': lr_scheduler.state_dict(),
+                     'args': args,
+                     'epoch': ep},
+                    os.path.join(args.save_to, f'{m_name}.pth')
+                )
         ep += 1
 
 

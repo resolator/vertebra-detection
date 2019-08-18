@@ -16,6 +16,9 @@ def calc_metrics(outputs, targets, iou_th=0.5):
     collected_pd_labels = []
     collected_ious = []
 
+    boxes_count = 0
+    matched_boxes_count = 0
+
     for gt, pd in zip(targets, outputs):
         sorted_gt_boxes = []
         sorted_pd_boxes = []
@@ -27,6 +30,7 @@ def calc_metrics(outputs, targets, iou_th=0.5):
         sorted_ious = []
 
         for i, gt_box in enumerate(gt['boxes']):
+            boxes_count += 1
             if len(pd_skip_indices) == len(pd['boxes']):
                 break
 
@@ -40,6 +44,7 @@ def calc_metrics(outputs, targets, iou_th=0.5):
             if len(ious) > 0:
                 max_idx = np.argmax(ious)
                 if ious[max_idx] >= iou_th:
+                    matched_boxes_count += 1
                     sorted_ious.append(ious[max_idx])
 
                     sorted_gt_boxes.append(gt['boxes'][i])
@@ -57,4 +62,5 @@ def calc_metrics(outputs, targets, iou_th=0.5):
     return np.array([precision_score(collected_gt_labels, collected_pd_labels),
                      recall_score(collected_gt_labels, collected_pd_labels),
                      f1_score(collected_gt_labels, collected_pd_labels),
-                     np.mean(collected_ious)])
+                     np.mean(collected_ious),
+                     matched_boxes_count / boxes_count])
