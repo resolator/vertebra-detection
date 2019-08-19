@@ -9,6 +9,7 @@ import configargparse
 
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from tqdm import tqdm
 
@@ -45,6 +46,13 @@ def get_args():
                         help='Print additional information.')
     parser.add_argument('--calc-mean-std', action='store_true',
                         help='Calculate mean and std on given images.')
+    parser.add_argument('--min-boxes-count', type=int,
+                        help='Don\'t use sample if it has fewer boxes than '
+                             'this value.')
+    parser.add_argument('--min-bin-size', type=int,
+                        help='Filter samples by bin size.')
+    parser.add_argument('--build-hist', action='store_true',
+                        help='Build histogram of labels count per image.')
 
     args = parser.parse_args()
 
@@ -275,8 +283,8 @@ def main():
                   'grudnoj-mezhpozvonochnyj-disk-zdorovyj']
 
     img_paths, labels, bboxes, sizes = [], [], [], []
+    boxes_th = 1 if args.min_boxes_count is None else args.min_boxes_count
     total_samples = 0
-
     # collect and parse source markup
     for mkp_name in os.listdir(args.markup_dir):
         mkp_path = os.path.join(args.markup_dir, mkp_name)
@@ -307,6 +315,7 @@ def main():
                 cur_labels = []
                 cur_bb = []
                 for obj in annot['object']:
+                    # skip deleted bounding box
                     if obj['deleted'] == '1':
                         continue
 
@@ -338,7 +347,7 @@ def main():
                     # cast to int for right json serialization
                     cur_bb.append([int(x) for x in bb])
 
-                if len(cur_labels) > 0:
+                if len(cur_labels) >= boxes_th:
                     # make and store img_path
                     img_paths.append(os.path.join(
                         args.images_dir,
@@ -348,9 +357,28 @@ def main():
                     labels.append(cur_labels)
                     bboxes.append(cur_bb)
 
-    if args.verbose:
-        print('\nTotal samples:', total_samples)
-        print('Good samples:', len(img_paths))
+    # filter by bin size
+    if args.min_bin_size is not None:
+        lens = [len(l) for l in labels]
+        unique_lens = list(set(lens))
+        lens_bins = [0] * len(unique_lens)
+        for l in lens:
+            lens_bins[unique_lens.index(l)] += 1
+
+        removed_indices = []
+        for size, cur_bin in zip(lens_bins, unique_lens):
+            if size < args.min_bin_size:
+                for idx, length in enumerate(lens):
+                    if length == int(cur_bin):
+                        removed_indices.append(idx)
+
+        filtered = [[], [], []]
+        for idx, data in enumerate(zip(img_paths, labels, bboxes)):
+            if idx not in removed_indices:
+                for f, d in zip(filtered, data):
+                    f.append(d)
+
+        img_paths, labels, bboxes = filtered
 
     if args.fix_markup:
         for i in range(len(bboxes)):
@@ -390,6 +418,14 @@ def main():
         calc_mean_std(args.images_dir)
 
     # visualization
+    if args.build_hist:
+        lens = [len(l) for l in labels]
+
+        plt.hist(lens, bins=range(min(lens), max(lens) + 2))
+        plt.xlabel('bins')
+        plt.ylabel('count of boxes per image')
+        plt.show()
+
     if args.visualize:
         vis_images = os.path.join(args.save_to, 'vis_images')
         os.makedirs(vis_images, exist_ok=True)
@@ -406,6 +442,10 @@ def main():
                 os.path.join(vis_images, os.path.basename(img_path)),
                 img
             )
+
+    if args.verbose:
+        print('\nTotal samples:', total_samples)
+        print('Good samples:', len(markup))
 
 
 if __name__ == '__main__':
