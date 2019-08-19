@@ -53,6 +53,8 @@ def get_args():
                         help='Filter samples by bin size.')
     parser.add_argument('--build-hist', action='store_true',
                         help='Build histogram of labels count per image.')
+    parser.add_argument('--seed', type=int,
+                        help='Set fixed seed for randomizers.')
 
     args = parser.parse_args()
 
@@ -276,6 +278,8 @@ def calc_mean_std(images_dir):
 def main():
     """Application entry point."""
     args = get_args()
+    if args.seed is not None:
+        np.random.seed(args.seed)
 
     good_for_markup_key = 'На срезе визуализируются межпозвоночные диски'
     good_for_markup_value = 'Визуализируются (можно размечать)'
@@ -422,8 +426,8 @@ def main():
         lens = [len(l) for l in labels]
 
         plt.hist(lens, bins=range(min(lens), max(lens) + 2))
-        plt.xlabel('bins')
-        plt.ylabel('count of boxes per image')
+        plt.xlabel('boxes per image count')
+        plt.ylabel('images count')
         plt.show()
 
     if args.visualize:
