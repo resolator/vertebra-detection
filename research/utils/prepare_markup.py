@@ -38,8 +38,8 @@ def get_args():
                         help='Search and remove overlapped bounding boxes.')
     parser.add_argument('--iou-th', type=float, default=0.65,
                         help='IoU threshold for bbox filtering.')
-    parser.add_argument('--markup-format', choices=['default', 'yolov3'],
-                        default='default',
+    parser.add_argument('--markup-format', default='default',
+                        choices=['default', 'yolov3', 'fasterrcnn'],
                         help='Format of resulted markup.')
     parser.add_argument('--verbose', action='store_true',
                         help='Print additional information.')
@@ -271,7 +271,8 @@ def main():
 
     good_for_markup_key = 'На срезе визуализируются межпозвоночные диски'
     good_for_markup_value = 'Визуализируются (можно размечать)'
-    zero_label = 'shejnyj-mezhpozvonochnyj-disk-zdorovyj'
+    zero_label = ['shejnyj-mezhpozvonochnyj-disk-zdorovyj',
+                  'grudnoj-mezhpozvonochnyj-disk-zdorovyj']
 
     img_paths, labels, bboxes, sizes = [], [], [], []
     total_samples = 0
@@ -312,8 +313,11 @@ def main():
                 cur_labels = []
                 cur_bb = []
                 for obj in annot['object']:
+                    if obj['deleted'] == '1':
+                        continue
+
                     # store label
-                    if obj['name'] == zero_label:
+                    if obj['name'] in zero_label:
                         cur_labels.append(False)
                     else:
                         cur_labels.append(True)
@@ -359,6 +363,10 @@ def main():
             img_paths, labels, bboxes, sizes, args.save_to, args.train_ratio
         )
     else:
+        if args.markup_format == 'fasterrcnn':
+            # zero label is a background so increase the other labels to 1
+            labels = [[int(l) + 1 for l in sample] for sample in labels]
+
         for path, cur_lb, cur_bb in zip(img_paths, labels, bboxes):
             annot = [{'label': lb, 'bbox': bb}
                      for lb, bb in zip(cur_lb, cur_bb)]
@@ -382,9 +390,12 @@ def main():
         os.makedirs(vis_images, exist_ok=True)
 
         print('\nVisualizing:')
-        for img_path, cur_lbs, cur_bb in tqdm(zip(img_paths, labels, bboxes)):
+        for img_path, cur_lbs, cur_bb in tqdm(zip(img_paths, labels, bboxes),
+                                              total=len(labels)):
             img = cv2.imread(img_path)
-            img = draw_bboxes(img, cur_bb, cur_lbs)
+            shifted_labels = args.markup_format == 'fasterrcnn'
+            img = draw_bboxes(img, cur_bb, cur_lbs,
+                              shifted_labels=shifted_labels)
 
             cv2.imwrite(
                 os.path.join(vis_images, os.path.basename(img_path)),
