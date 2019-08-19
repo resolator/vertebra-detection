@@ -91,7 +91,7 @@ def calc_metrics(outputs, targets, iou_th=0.5):
         collected_ious += sorted_ious
 
     if len(all_gt_labels) == 0 and len(all_pd_labels) == 0:
-        return np.zeros(5)
+        return np.zeros(6)
 
     return np.array([
         precision_score(all_gt_labels, all_pd_labels, pos_label=2),
