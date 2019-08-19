@@ -18,7 +18,7 @@ def get_transforms(crop_factor, h_flip_prob, v_flip_prob, mean, std,
         custom_t.Normalize(mean=mean, std=std)
     ])
     test_transforms = torchvision.transforms.Compose([
-        custom_t.BottomRightCrop(crop_factor),
+        custom_t.Crop(crop_factor, center_crop=center_crop),
         custom_t.ToTensor(),
         custom_t.Normalize(mean=mean, std=std),
     ])

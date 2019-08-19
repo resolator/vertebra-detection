@@ -4,16 +4,47 @@ import os
 import sys
 
 import numpy as np
-
 from sklearn.metrics import precision_score, recall_score, f1_score
+from sklearn.metrics import average_precision_score
 
 sys.path.append(os.path.join(sys.path[0], '../common'))
 from utils import calc_iou_bbox
 
 
+def postprocessing(outputs, iou_th=0.65):
+    resulted_outputs = []
+    for output in outputs:
+        removed_indices = []
+        for i in range(len(output['boxes'])):
+            for j in range(i, len(output['boxes'])):
+                if i == j:
+                    continue
+
+                iou = calc_iou_bbox(output['boxes'][i], output['boxes'][j])
+                # remove box with lower score
+                if iou > iou_th:
+                    if output['scores'][i] > output['scores'][j]:
+                        removed_indices.append(j)
+                    else:
+                        removed_indices.append(i)
+
+        boxes, labels, scores = [], [], []
+        for i in range(len(output['boxes'])):
+            if i not in removed_indices:
+                boxes.append(output['boxes'][i])
+                labels.append(output['labels'][i])
+                scores.append(output['scores'][i])
+
+        resulted_outputs.append(
+            {'boxes': boxes, 'labels': labels, 'scores': scores}
+        )
+
+    return resulted_outputs
+
+
 def calc_metrics(outputs, targets, iou_th=0.5):
-    collected_gt_labels = []
-    collected_pd_labels = []
+    all_gt_labels = []
+    all_pd_labels = []
     collected_ious = []
 
     boxes_count = 0
@@ -55,12 +86,18 @@ def calc_metrics(outputs, targets, iou_th=0.5):
 
                     pd_skip_indices.append(max_idx)
 
-        collected_gt_labels += sorted_gt_labels
-        collected_pd_labels += sorted_pd_labels
+        all_gt_labels += sorted_gt_labels
+        all_pd_labels += sorted_pd_labels
         collected_ious += sorted_ious
 
-    return np.array([precision_score(collected_gt_labels, collected_pd_labels),
-                     recall_score(collected_gt_labels, collected_pd_labels),
-                     f1_score(collected_gt_labels, collected_pd_labels),
-                     np.mean(collected_ious),
-                     matched_boxes_count / boxes_count])
+    if len(all_gt_labels) == 0 and len(all_pd_labels) == 0:
+        return np.zeros(5)
+
+    return np.array([
+        precision_score(all_gt_labels, all_pd_labels, pos_label=2),
+        recall_score(all_gt_labels, all_pd_labels, pos_label=2),
+        f1_score(all_gt_labels, all_pd_labels, pos_label=2),
+        average_precision_score(all_gt_labels, all_pd_labels, pos_label=2),
+        np.mean(collected_ious),
+        matched_boxes_count / boxes_count
+    ])

@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-import cv2
 import configargparse
 
 import numpy as np
@@ -17,7 +16,7 @@ from torch.utils.tensorboard import SummaryWriter
 from torchvision.models.detection import fasterrcnn_resnet50_fpn, faster_rcnn
 
 from vertebra_dataset import VertebraDataset, get_transforms
-from metrics import *
+from metrics import calc_metrics, postprocessing
 
 sys.path.append(os.path.join(sys.path[0], '../common'))
 from utils import draw_bboxes
@@ -111,7 +110,7 @@ def train_one_epoch(model, optimizer, loader, device, ep, writer,
         if not isfinite(loss_value):
             print("\n\nLoss is {}".format(loss_value))
             [print(f'{k}: {v}') for k, v in loss_dict.items()]
-            # exit(1)
+            exit(1)
 
         optimizer.zero_grad()
         losses.backward()
@@ -134,7 +133,8 @@ def evaluate_one_epoch(model,
                        best_metrics,
                        std,
                        mean,
-                       iou_th=0.5):
+                       iou_th=0.5,
+                       iou_th_postprocessing=0.65):
     cpu_device = torch.device('cpu')
     model.eval()
 
@@ -149,6 +149,8 @@ def evaluate_one_epoch(model,
                    for k, v in t.items()} for t in output]
         target = [{k: v.to(cpu_device).numpy()
                    for k, v in t.items()} for t in target]
+
+        output = postprocessing(output, iou_th_postprocessing)
 
         metrics += calc_metrics(output, target, iou_th)
 
@@ -279,7 +281,7 @@ def main():
         )
 
     # metrics storage
-    m_names = ['precision', 'recall', 'f1', 'iou', 'matched_boxes']
+    m_names = ['precision', 'recall', 'f1', 'mAP', 'iou', 'matched_boxes']
     best_metrics = np.zeros(len(m_names))
 
     # main train cycle
