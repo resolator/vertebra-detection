@@ -295,12 +295,6 @@ def main():
                         print('Error:', e)
                     continue
 
-                # make and store img_path
-                img_paths.append(os.path.join(
-                    args.images_dir,
-                    df['Файлы'][idx].replace('/n', '')
-                ))
-
                 # extract labels and bboxes
                 if 'annotation' in xml.keys():
                     annot = xml['annotation']
@@ -314,6 +308,10 @@ def main():
                 cur_bb = []
                 for obj in annot['object']:
                     if obj['deleted'] == '1':
+                        continue
+
+                    # skip thoracic spine
+                    if 'grudnoj' in obj['name']:
                         continue
 
                     # store label
@@ -340,8 +338,15 @@ def main():
                     # cast to int for right json serialization
                     cur_bb.append([int(x) for x in bb])
 
-                labels.append(cur_labels)
-                bboxes.append(cur_bb)
+                if len(cur_labels) > 0:
+                    # make and store img_path
+                    img_paths.append(os.path.join(
+                        args.images_dir,
+                        df['Файлы'][idx].replace('/n', '')
+                    ))
+
+                    labels.append(cur_labels)
+                    bboxes.append(cur_bb)
 
     if args.verbose:
         print('\nTotal samples:', total_samples)
