@@ -9,3 +9,4 @@ torchvision
 future
 tensorboard
 matplotlib
+sklearn
