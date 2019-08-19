@@ -7,3 +7,4 @@ pandas
 torch
 torchvision
 future
+tensorboard
