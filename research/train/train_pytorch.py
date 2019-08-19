@@ -167,13 +167,15 @@ def evaluate_one_epoch(model,
                 img.copy(),
                 target[sample_idx]['boxes'],
                 target[sample_idx]['labels'],
-                from_tensor=True
+                from_tensor=True,
+                shifted_labels=True
             )
             pd_img = draw_bboxes(
                 img,
                 output[sample_idx]['boxes'],
                 output[sample_idx]['labels'],
-                from_tensor=True
+                from_tensor=True,
+                shifted_labels=True
             )
             writer.add_image('Test/gt_image', gt_img, ep, dataformats='HWC')
             writer.add_image('Test/pd_image', pd_img, ep, dataformats='HWC')

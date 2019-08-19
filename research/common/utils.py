@@ -15,13 +15,17 @@ def bb2pts(bb):
     return pts.reshape((-1, 1, 2))
 
 
-def draw_bboxes(img, bboxes, labels, from_tensor=False):
+def draw_bboxes(img, bboxes, labels, from_tensor=False, shifted_labels=False):
     if from_tensor:
         img = (img * 255).astype(np.uint8)
     for box, label in zip(bboxes, labels):
         pts = bb2pts(box)
-        if from_tensor:
-            color = (255, 0, 0) if label == 2 else (0, 255, 0)
+        if shifted_labels:
+            if from_tensor:
+                color = (255, 0, 0) if label == 2 else (0, 255, 0)
+            else:
+                color = (0, 0, 255) if label == 2 else (0, 255, 0)
+
         else:
             color = (0, 0, 255) if label else (0, 255, 0)
         img = cv2.polylines(img, [pts], True, color)
