@@ -14,10 +14,9 @@ import torch
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
-from torchvision import transforms, models
-from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
+from torchvision.models.detection import fasterrcnn_resnet50_fpn, faster_rcnn
 
-from vertebra_dataset import *
+from vertebra_dataset import VertebraDataset, get_transforms
 from metrics import *
 
 sys.path.append(os.path.join(sys.path[0], '../common'))
@@ -52,6 +51,8 @@ def get_args():
                         help='Weight decay for optimizer.')
     parser.add_argument('--crop-factor', type=float, default=0.1,
                         help='Crop factor part of image\'s top-left.')
+    parser.add_argument('--center-crop', action='store_true',
+                        help='Use central crop instead of bottom right crop.')
     parser.add_argument('--h-flip-prob', type=float, default=0.5,
                         help='Probability for horizontal flip.')
     parser.add_argument('--v-flip-prob', type=float, default=0.5,
@@ -206,19 +207,14 @@ def main():
     writer = SummaryWriter(logs_path)
 
     # data processing preparation
-    train_transforms = transforms.Compose([
-        BottomRightCrop(args.crop_factor),
-        RandomHorizontalFlip(args.h_flip_prob),
-        RandomVerticalFlip(args.v_flip_prob),
-        ToTensor(),
-        Normalize(mean=args.mean, std=args.std)
-    ])
-    test_transforms = transforms.Compose([
-        BottomRightCrop(args.crop_factor),
-        ToTensor(),
-        Normalize(mean=args.mean, std=args.std),
-    ])
-
+    train_transforms, test_transforms = get_transforms(
+        crop_factor=args.crop_factor,
+        h_flip_prob=args.h_flip_prob,
+        v_flip_prob=args.v_flip_prob,
+        mean=args.mean,
+        std=args.std,
+        center_crop=args.center_crop
+    )
     train_ds = VertebraDataset(args.train_json, transform=train_transforms)
     test_ds = VertebraDataset(args.test_json, transform=test_transforms)
 
@@ -227,14 +223,14 @@ def main():
         batch_size=args.bs,
         shuffle=True,
         num_workers=args.loader_workers,
-        collate_fn=collate_fn
+        collate_fn=train_ds.collate_fn
     )
     test_loader = DataLoader(
         dataset=test_ds,
         batch_size=args.bs,
         shuffle=False,
         num_workers=args.loader_workers,
-        collate_fn=collate_fn
+        collate_fn=test_ds.collate_fn
     )
 
     # model definition
@@ -244,13 +240,13 @@ def main():
 
     num_classes = 3
     if args.pretrained:
-        model = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
+        model = fasterrcnn_resnet50_fpn(pretrained=True)
         in_features = model.roi_heads.box_predictor.cls_score.in_features
-        model.roi_heads.box_predictor = FastRCNNPredictor(
+        model.roi_heads.box_predictor = faster_rcnn.FastRCNNPredictor(
             in_features, num_classes
         )
     else:
-        model = models.detection.fasterrcnn_resnet50_fpn(
+        model = fasterrcnn_resnet50_fpn(
             pretrained=False, num_classes=num_classes
         )
     model.to(device)
