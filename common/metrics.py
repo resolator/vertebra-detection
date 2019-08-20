@@ -28,14 +28,14 @@ def extract_tfpn(output, target, iou_th=0.5):
     return tp, fp, fn, y_true, y_score
 
 
-def calc_metrics(outputs, targets, iou_th=0.5):
+def calc_metrics(output, target, iou_th=0.5):
     """
 
     Parameters
     ----------
-    outputs : List
+    output : List
         Outputs from FasterRCNN in evaluation mode.
-    targets : List
+    target : List
         Same as outputs but ground truth.
     iou_th : float
         Threshold for match GT and PD boxes.
@@ -46,7 +46,7 @@ def calc_metrics(outputs, targets, iou_th=0.5):
         Precision, recall, F1, ap for one sample.
 
     """
-    tp, fp, fn, y_true, y_score = extract_tfpn(outputs, targets, iou_th=iou_th)
+    tp, fp, fn, y_true, y_score = extract_tfpn(output, target, iou_th=iou_th)
 
     if len(y_true) == 0:
         return 0, 0, 0, 0

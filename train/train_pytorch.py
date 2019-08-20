@@ -5,9 +5,8 @@ import sys
 import configargparse
 
 import numpy as np
-import sklearn.metrics as sk_metrics
 
-from math import isfinite
+from math import isfinite, isnan
 from tqdm import tqdm
 
 import torch
@@ -19,7 +18,8 @@ from torchvision.models.detection import fasterrcnn_resnet50_fpn, faster_rcnn
 from vertebra_dataset import VertebraDataset, get_transforms
 
 sys.path.append(os.path.join(sys.path[0], '../'))
-from common.utils import draw_bboxes, match_labels, postprocessing
+from common.utils import draw_bboxes, postprocessing
+from common.metrics import calc_metrics
 
 
 def get_args():
@@ -158,7 +158,7 @@ def evaluate_one_epoch(model,
                        best_metrics,
                        std,
                        mean,
-                       iou_th=0.5,
+                       metrics_iou_th=0.5,
                        iou_th_postprocessing=0.65):
     """Run model on test dataset and calculate metrics.
 
@@ -186,7 +186,7 @@ def evaluate_one_epoch(model,
         Standart deviation for every channel (RGB order).
     mean : List
         Mean for every channel (RGB order).
-    iou_th : float
+    metrics_iou_th : float
         Threshold for match gt_box with pd_box.
     iou_th_postprocessing : float
         Threshold for filter predicted boxes.
@@ -201,22 +201,23 @@ def evaluate_one_epoch(model,
     model.eval()
 
     batch_num = np.random.randint(0, len(loader) - 1)
-    all_gt_labels, all_pd_labels = [], []
-    for idx, (images, target) in tqdm(enumerate(loader),
-                                      desc=f'Testing {ep}', total=len(loader)):
+    metrics = [[], [], [], []]
+    for idx, (images, targets) in tqdm(
+            enumerate(loader), desc=f'Testing {ep}', total=len(loader)):
         images = list(img.to(device) for img in images)
-        output = model(images)
+        outputs = model(images)
 
-        output = [{k: v.to(cpu_device).numpy()
-                   for k, v in t.items()} for t in output]
-        target = [{k: v.to(cpu_device).numpy()
-                   for k, v in t.items()} for t in target]
+        outputs = [{k: v.to(cpu_device).numpy()
+                    for k, v in t.items()} for t in outputs]
+        targets = [{k: v.to(cpu_device).numpy()
+                    for k, v in t.items()} for t in targets]
 
-        output = postprocessing(output, iou_th_postprocessing)
+        outputs = postprocessing(outputs, iou_th_postprocessing)
 
-        gt_labels, pd_labels = match_labels(output, target, iou_th)
-        all_gt_labels += gt_labels
-        all_pd_labels += pd_labels
+        # metrics collecting
+        for output, target in zip(outputs, targets):
+            cur_m = calc_metrics(output, target, iou_th=metrics_iou_th)
+            [m.append(x) for x, m in zip(cur_m, metrics) if not isnan(x)]
 
         # draw random image
         if idx == batch_num:
@@ -224,16 +225,16 @@ def evaluate_one_epoch(model,
 
             gt_img = draw_bboxes(
                 images[sample_idx],
-                target[sample_idx]['boxes'],
-                target[sample_idx]['labels'],
+                targets[sample_idx]['boxes'],
+                targets[sample_idx]['labels'],
                 shifted_labels=True,
                 mean=mean,
                 std=std
             )
             pd_img = draw_bboxes(
                 images[sample_idx],
-                output[sample_idx]['boxes'],
-                output[sample_idx]['labels'],
+                outputs[sample_idx]['boxes'],
+                outputs[sample_idx]['labels'],
                 shifted_labels=True,
                 mean=mean,
                 std=std
@@ -242,17 +243,13 @@ def evaluate_one_epoch(model,
             writer.add_image('Test/pd_image', pd_img, ep, dataformats='HWC')
 
     # metrics preparation and dumping
-    metrics_f = [sk_metrics.precision_score,
-                 sk_metrics.recall_score,
-                 sk_metrics.f1_score,
-                 sk_metrics.average_precision_score]
 
     metrics_for_save = ['last']
-    for idx, (m_name, m_func, m_best) in enumerate(zip(
-            m_names, metrics_f, best_metrics)):
-        m = m_func(all_gt_labels, all_pd_labels, pos_label=2)
-        print(f'Test {m_name}: {m}')
-        writer.add_scalar('Test/' + m_name, m, ep)
+    for idx, (m_name, m, m_best) in enumerate(
+            zip(m_names, metrics, best_metrics)):
+        m = np.mean(m)
+        print(f'Test mean {m_name}: {m}')
+        writer.add_scalar('Test/mean_' + m_name, m, ep)
 
         if m > m_best:
             best_metrics[idx] = m
@@ -343,7 +340,7 @@ def main():
         )
 
     # metrics storage
-    m_names = ['precision', 'recall', 'f1', 'mAP']
+    m_names = ['precision', 'recall', 'f1', 'AP']
     best_metrics = np.zeros(len(m_names))
 
     models_path = os.path.join(args.save_to, 'models')

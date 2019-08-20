@@ -14,7 +14,7 @@ import torch
 from torchvision import transforms, models
 
 sys.path.append(os.path.join(sys.path[0], '../'))
-from common.utils import postprocessing, match_labels, draw_bboxes
+from common.utils import postprocessing, draw_bboxes
 from common.metrics import calc_metrics
 
 
