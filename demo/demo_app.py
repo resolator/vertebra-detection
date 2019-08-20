@@ -29,7 +29,7 @@ def get_args():
     parser.add_argument('--save-to',
                         help='Path to dir for store classification results '
                              'instead of displaying them.')
-    parser.add_argument('--iou-th', type=float, default=0.65,
+    parser.add_argument('--iou-th', type=float, default=0.6,
                         help='Arg for remove intersecting boxes.')
 
     args = parser.parse_args()
@@ -53,11 +53,16 @@ def main():
                    for path in os.listdir(args.images)]
 
     # model preparation
+    device = torch.device('cpu')
+    if torch.cuda.is_available():
+        device = torch.device('cuda')
+
     ckpt = torch.load(args.model_path)
 
     model = models.detection.fasterrcnn_resnet50_fpn(pretrained=False,
                                                      num_classes=3)
     model.load_state_dict(ckpt['model'])
+    model.to(device)
     model.eval()
 
     transform = transforms.Compose([
@@ -76,7 +81,7 @@ def main():
                 img_path = sample
 
             img = Image.open(img_path)
-            prepared_img = transform(img)
+            prepared_img = transform(img).to(device)
 
             output = model([prepared_img])
             output = {k: v.to(cpu_device).numpy()
