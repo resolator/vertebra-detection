@@ -5,15 +5,17 @@ import cv2
 import sys
 import json
 import argparse
-import sklearn.metrics as sk_metrics
+import numpy as np
 from tqdm import tqdm
 from PIL import Image
+from math import isnan
 
 import torch
 from torchvision import transforms, models
 
 sys.path.append(os.path.join(sys.path[0], '../'))
 from common.utils import postprocessing, match_labels, draw_bboxes
+from common.metrics import calc_metrics
 
 
 def get_args():
@@ -70,7 +72,8 @@ def main():
         transforms.Normalize(ckpt['args'].mean, ckpt['args'].std)
     ])
 
-    all_gt_labels, all_pd_labels = [], []
+    m_names = ['Precision', 'Recall', 'F1', 'mAP']
+    metrics = [[], [], [], []]
     cpu_device = torch.device('cpu')
     with torch.no_grad():
         for sample in tqdm(samples, desc='Predicting'):
@@ -89,14 +92,13 @@ def main():
             output = postprocessing([output], iou_th=args.iou_th)[0]
 
             # evaluate if markup file was passed
-            if markup is not None:
-                target = [{
+            if markup:
+                target = {
                     'boxes': [x['bbox'] for x in sample['annotation']],
                     'labels': [int(x['label']) for x in sample['annotation']]
-                }]
-                gt_labels, pd_labels = match_labels([output], target)
-                all_gt_labels += gt_labels
-                all_pd_labels += pd_labels
+                }
+                cur_m = np.array(calc_metrics(output, target))
+                [m.append(x) for x, m in zip(cur_m, metrics) if not isnan(x)]
 
             img = cv2.imread(img_path)
             drawn_img = draw_bboxes(img, output['boxes'], output['labels'],
@@ -113,16 +115,10 @@ def main():
                 cv2.imwrite(save_path, drawn_img)
 
     # calculate metrics if markup file was passed
-    if len(all_gt_labels) > 0:
+    if markup:
         print()
-        m_names = ['Precision', 'Recall', 'F1']
-        m_funcs = [sk_metrics.precision_score,
-                   sk_metrics.recall_score,
-                   sk_metrics.f1_score]
-
-        for m_name, m_func in zip(m_names, m_funcs):
-            m = m_func(all_gt_labels, all_pd_labels, pos_label=2)
-            print(f'{m_name}: {m}')
+        for m_name, m in zip(m_names, metrics):
+            print(f'{m_name}: {np.mean(m)}')
 
 
 if __name__ == '__main__':
