@@ -4,14 +4,27 @@ import os
 import sys
 
 import numpy as np
-from sklearn.metrics import precision_score, recall_score, f1_score
-from sklearn.metrics import average_precision_score
 
 sys.path.append(os.path.join(sys.path[0], '../common'))
 from utils import calc_iou_bbox
 
 
 def postprocessing(outputs, iou_th=0.65):
+    """Post processing for FasterRCNN output.
+
+    Parameters
+    ----------
+    outputs : List
+        Outputs from FasterRCNN in evaluation mode.
+    iou_th : float
+        Threshold for remove very intersecting boxes.
+
+    Returns
+    -------
+    List
+        Processed outputs.
+
+    """
     resulted_outputs = []
     for output in outputs:
         removed_indices = []
@@ -42,7 +55,24 @@ def postprocessing(outputs, iou_th=0.65):
     return resulted_outputs
 
 
-def calc_metrics(outputs, targets, iou_th=0.5):
+def match_labels(outputs, targets, iou_th=0.5):
+    """Match GT labels to PD labels using boxes intersection.
+
+    Parameters
+    ----------
+    outputs : List
+        Outputs from FasterRCNN in evaluation mode.
+    targets : List
+        Same as outputs but ground truth.
+    iou_th : float
+        Threshold for match GT and PD boxes.
+
+    Returns
+    -------
+    tuple
+        Tuple with matched_gt_labels and matched_pd_labels.
+
+    """
     all_gt_labels = []
     all_pd_labels = []
     collected_ious = []
@@ -90,14 +120,4 @@ def calc_metrics(outputs, targets, iou_th=0.5):
         all_pd_labels += sorted_pd_labels
         collected_ious += sorted_ious
 
-    if len(all_gt_labels) == 0 and len(all_pd_labels) == 0:
-        return np.zeros(6)
-
-    return np.array([
-        precision_score(all_gt_labels, all_pd_labels, pos_label=2),
-        recall_score(all_gt_labels, all_pd_labels, pos_label=2),
-        f1_score(all_gt_labels, all_pd_labels, pos_label=2),
-        average_precision_score(all_gt_labels, all_pd_labels, pos_label=2),
-        np.mean(collected_ious),
-        matched_boxes_count / boxes_count
-    ])
+    return all_gt_labels, all_pd_labels

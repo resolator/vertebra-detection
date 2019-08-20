@@ -5,6 +5,7 @@ import sys
 import configargparse
 
 import numpy as np
+import sklearn.metrics as sk_metrics
 
 from math import isfinite
 from tqdm import tqdm
@@ -16,7 +17,7 @@ from torch.utils.tensorboard import SummaryWriter
 from torchvision.models.detection import fasterrcnn_resnet50_fpn, faster_rcnn
 
 from vertebra_dataset import VertebraDataset, get_transforms
-from metrics import calc_metrics, postprocessing
+from utils import match_labels, postprocessing
 
 sys.path.append(os.path.join(sys.path[0], '../common'))
 from utils import draw_bboxes
@@ -81,7 +82,7 @@ def get_args():
 
 
 def warmup_lr_scheduler(optimizer, warmup_iters, warmup_factor):
-
+    """Simple LR scheduler warmup."""
     def f(x):
         if x >= warmup_iters:
             return 1
@@ -91,8 +92,33 @@ def warmup_lr_scheduler(optimizer, warmup_iters, warmup_factor):
     return optim.lr_scheduler.LambdaLR(optimizer, f)
 
 
-def train_one_epoch(model, optimizer, loader, device, ep, writer,
+def train_one_epoch(model,
+                    optimizer,
+                    loader,
+                    device,
+                    ep,
+                    writer,
                     lr_scheduler=None):
+    """Train model once on train dataset.
+
+    Parameters
+    ----------
+    model : torch model
+        FasterRCNN model for train.
+    optimizer : torch optimizer
+        Torch optimizer.
+    loader : DataLoader
+        Train dataloader.
+    device : torch.device
+        Device for train.
+    ep : int
+        Current epoch number.
+    writer : SummaryWriter
+        Tensorboard writter
+    lr_scheduler : torch lr scheduler
+        Scheduler for learrning rate.
+
+    """
     model.train()
 
     cycle = tqdm(loader, desc=f'Training {ep}')
@@ -135,11 +161,48 @@ def evaluate_one_epoch(model,
                        mean,
                        iou_th=0.5,
                        iou_th_postprocessing=0.65):
+    """Run model on test dataset and calculate metrics.
+
+    Run model on all evaluation dataset. Remove very intersecting boxes from
+    each prediction. Match GT and PD labels and calculate metrics on collected
+    labels. Log resulted metrics and compare them with best metrics.
+
+    Parameters
+    ----------
+    model : torch model
+        FasterRCNN model for evaluation.
+    loader : DataLoader
+        Test dataloader.
+    device : torch.device
+        Device for evaluation.
+    ep : int
+        Current epoch number.
+    writer : SummaryWriter
+        Tensorboard writter.
+    m_names : List
+        Names of metrics for tensorboard .
+    best_metrics : List
+        List with best values of metrics.
+    std : List
+        Standart deviation for every channel (RGB order).
+    mean : List
+        Mean for every channel (RGB order).
+    iou_th : float
+        Threshold for match gt_box with pd_box.
+    iou_th_postprocessing : float
+        Threshold for filter predicted boxes.
+
+    Returns
+    -------
+    List
+        Metrics names for save if calculated metric is better than best.
+
+    """
     cpu_device = torch.device('cpu')
     model.eval()
 
     batch_num = np.random.randint(0, len(loader) - 1)
-    metrics = np.zeros(len(m_names))
+    all_gt_labels, all_pd_labels = [], []
     for idx, (images, target) in tqdm(enumerate(loader),
                                       desc=f'Testing {ep}', total=len(loader)):
         images = list(img.to(device) for img in images)
@@ -152,7 +215,9 @@ def evaluate_one_epoch(model,
 
         output = postprocessing(output, iou_th_postprocessing)
 
-        metrics += calc_metrics(output, target, iou_th)
+        gt_labels, pd_labels = match_labels(output, target, iou_th)
+        all_gt_labels += gt_labels
+        all_pd_labels += pd_labels
 
         # draw random image
         if idx == batch_num:
@@ -184,11 +249,15 @@ def evaluate_one_epoch(model,
             writer.add_image('Test/pd_image', pd_img, ep, dataformats='HWC')
 
     # metrics preparation and dumping
-    metrics_for_save = []
-    for idx, (m_name, m_sum, m_best) in enumerate(zip(
-            m_names, metrics, best_metrics)):
-        m = m_sum / len(loader)
+    metrics_f = [sk_metrics.precision_score,
+                 sk_metrics.recall_score,
+                 sk_metrics.f1_score,
+                 sk_metrics.average_precision_score]
 
+    metrics_for_save = ['last']
+    for idx, (m_name, m_func, m_best) in enumerate(zip(
+            m_names, metrics_f, best_metrics)):
+        m = m_func(all_gt_labels, all_pd_labels, pos_label=2)
         print(f'Test {m_name}: {m}')
         writer.add_scalar('Test/' + m_name, m, ep)
 
@@ -281,7 +350,7 @@ def main():
         )
 
     # metrics storage
-    m_names = ['precision', 'recall', 'f1', 'mAP', 'iou', 'matched_boxes']
+    m_names = ['precision', 'recall', 'f1', 'mAP']
     best_metrics = np.zeros(len(m_names))
 
     # main train cycle
@@ -300,16 +369,15 @@ def main():
             args.mean
         )
 
-        if len(save_model) > 0:
-            for m_name in save_model:
-                torch.save(
-                    {'model': model.state_dict(),
-                     'optimizer': optimizer.state_dict(),
-                     'lr_scheduler': lr_scheduler.state_dict(),
-                     'args': args,
-                     'epoch': ep},
-                    os.path.join(args.save_to, f'{m_name}.pth')
-                )
+        for m_name in save_model:
+            torch.save(
+                {'model': model.state_dict(),
+                 'optimizer': optimizer.state_dict(),
+                 'lr_scheduler': lr_scheduler.state_dict(),
+                 'args': args,
+                 'epoch': ep},
+                os.path.join(args.save_to, f'{m_name}.pth')
+            )
         ep += 1
 
 
