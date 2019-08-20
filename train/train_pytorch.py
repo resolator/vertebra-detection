@@ -17,10 +17,9 @@ from torch.utils.tensorboard import SummaryWriter
 from torchvision.models.detection import fasterrcnn_resnet50_fpn, faster_rcnn
 
 from vertebra_dataset import VertebraDataset, get_transforms
-from utils import match_labels, postprocessing
 
 sys.path.append(os.path.join(sys.path[0], '../'))
-from common.utils import draw_bboxes
+from common.utils import draw_bboxes, match_labels, postprocessing
 
 
 def get_args():
@@ -223,27 +222,21 @@ def evaluate_one_epoch(model,
         if idx == batch_num:
             sample_idx = np.random.randint(0, len(images) - 1)
 
-            tensor_img = images[sample_idx].detach()
-            # denormalize
-            for t, m, s in zip(tensor_img, mean, std):
-                t.mul_(s).add_(m)
-
-            # convert to cv2 format
-            img = tensor_img.cpu().numpy().transpose((1, 2, 0))
-
             gt_img = draw_bboxes(
-                img.copy(),
+                images[sample_idx],
                 target[sample_idx]['boxes'],
                 target[sample_idx]['labels'],
-                from_tensor=True,
-                shifted_labels=True
+                shifted_labels=True,
+                mean=mean,
+                std=std
             )
             pd_img = draw_bboxes(
-                img,
+                images[sample_idx],
                 output[sample_idx]['boxes'],
                 output[sample_idx]['labels'],
-                from_tensor=True,
-                shifted_labels=True
+                shifted_labels=True,
+                mean=mean,
+                std=std
             )
             writer.add_image('Test/gt_image', gt_img, ep, dataformats='HWC')
             writer.add_image('Test/pd_image', pd_img, ep, dataformats='HWC')

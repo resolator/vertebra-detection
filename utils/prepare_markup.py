@@ -409,10 +409,10 @@ def main():
                      for lb, bb in zip(cur_lb, cur_bb)]
             markup.append({'img_path': path, 'annotation': annot})
 
-        if args.train_ratio is None:
-            with open(os.path.join(args.save_to, 'markup.json'), 'w') as f:
-                json.dump(markup, fp=f, indent=4)
-        else:
+        with open(os.path.join(args.save_to, 'markup.json'), 'w') as f:
+            json.dump(markup, fp=f, indent=4)
+
+        if args.train_ratio is not None:
             splitted_markup = split_by_ratio(markup, args.train_ratio)
             for ph, mkp in zip(['train', 'test'], splitted_markup):
                 with open(os.path.join(args.save_to, ph + '.json'), 'w') as f:
