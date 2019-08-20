@@ -30,13 +30,15 @@ def main():
         ckpt = torch.load(args.model_path)
         save_name = os.path.join(args.save_to,
                                  os.path.basename(args.model_path))
-        torch.save(ckpt['model'], save_name)
+        torch.save({'model': ckpt['model'],
+                    'args': ckpt['args']}, save_name)
     else:
         for model_name in tqdm(os.listdir(args.model_path), desc='Cleaning'):
             model_path = os.path.join(args.model_path, model_name)
             ckpt = torch.load(model_path)
             save_name = os.path.join(args.save_to, model_name)
-            torch.save(ckpt['model'], save_name)
+            torch.save({'model': ckpt['model'],
+                        'args': ckpt['args']}, save_name)
 
 
 if __name__ == '__main__':
