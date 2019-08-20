@@ -19,8 +19,8 @@ from torchvision.models.detection import fasterrcnn_resnet50_fpn, faster_rcnn
 from vertebra_dataset import VertebraDataset, get_transforms
 from utils import match_labels, postprocessing
 
-sys.path.append(os.path.join(sys.path[0], '../common'))
-from utils import draw_bboxes
+sys.path.append(os.path.join(sys.path[0], '../'))
+from common.utils import draw_bboxes
 
 
 def get_args():
@@ -353,6 +353,9 @@ def main():
     m_names = ['precision', 'recall', 'f1', 'mAP']
     best_metrics = np.zeros(len(m_names))
 
+    models_path = os.path.join(args.save_to, 'models')
+    os.makedirs(models_path, exist_ok=True)
+
     # main train cycle
     while ep != epochs:
         train_one_epoch(model, optimizer, train_loader, device, ep, writer,
@@ -376,7 +379,7 @@ def main():
                  'lr_scheduler': lr_scheduler.state_dict(),
                  'args': args,
                  'epoch': ep},
-                os.path.join(args.save_to, f'{m_name}.pth')
+                os.path.join(models_path, f'{m_name}.pth')
             )
         ep += 1
 

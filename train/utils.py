@@ -5,8 +5,8 @@ import sys
 
 import numpy as np
 
-sys.path.append(os.path.join(sys.path[0], '../common'))
-from utils import calc_iou_bbox
+sys.path.append(os.path.join(sys.path[0], '../'))
+from common.utils import calc_iou_bbox
 
 
 def postprocessing(outputs, iou_th=0.65):

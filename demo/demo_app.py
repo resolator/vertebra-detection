@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import cv2
+import sys
 import json
 import argparse
 import numpy as np
@@ -11,6 +12,9 @@ from PIL import Image
 import torch
 from torchvision import transforms, models
 
+sys.path.append(os.path.join(sys.path[0], '../common'))
+from utils import postprocessing, match_labels
+
 
 def get_args():
     """Arguments parser."""
@@ -19,8 +23,9 @@ def get_args():
     )
     parser.add_argument('--images', required=True,
                         help='Path to dir with images for classification. '
-                             'It also can be a markup file.')
-    parser.add_argument('--model-path', default='../')
+                             'It also can be a markup file for evaluation.')
+    parser.add_argument('--model-path', default='../data/model.pth',
+                        help='Path to trained model.')
     parser.add_argument('--save-to',
                         help='Path to dir for store classification results '
                              'instead of displaying them.')
@@ -33,6 +38,7 @@ def get_args():
 
 
 def bb2pts(bb):
+    """Convert bounding box to cv2 pts."""
     pts = np.array([[bb[0], bb[1]],
                     [bb[0], bb[3]],
                     [bb[2], bb[3]],
@@ -42,6 +48,7 @@ def bb2pts(bb):
 
 
 def draw_bboxes(img, bboxes, labels):
+    """Draw bounding box on image and return drawn image."""
     for box, label in zip(bboxes, labels):
         pts = bb2pts(box)
         color = (0, 0, 255) if label else (0, 255, 0)
@@ -51,11 +58,14 @@ def draw_bboxes(img, bboxes, labels):
 
 
 def main():
+    """Application entry point."""
     args = get_args()
 
     if os.path.isfile(args.images):
         with open(args.images) as f:
-            images_paths = [x['img_path'] for x in json.load(f)]
+            markup_file = json.load(f)
+            images_paths = [x['img_path'] for x in markup_file]
+
     else:
         images_paths = os.listdir(args.images)
 
