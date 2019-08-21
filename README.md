@@ -137,9 +137,11 @@ python3 demo/demo_app.py --images PATH_TO_FOLDER_WITH_IMAGES_ONLY --model-path d
 - Пост обработка фильтрует дублирующиеся bounding box'ы
 - Оптимизированный расчет метрик
 
+
 #### Процесс обучения лучшей модели:
 
 ![train_process](content/train_process.png?raw=true)
+
 
 #### Итоговые метрики
 
@@ -150,7 +152,24 @@ python3 demo/demo_app.py --images PATH_TO_FOLDER_WITH_IMAGES_ONLY --model-path d
 | F1        | 0.843      | 0.714     | 0.8         |
 | mAP       | 0.571      | 0.679     | 0.605       |
 
+
+#### Примеры предсказаний
+
+На test выборке (слева - GT, справа - PD):
+
+![img_00292.jpg](content/img_00292.jpg?raw=true)
+![img_00357.jpg](content/img_00357.jpg?raw=true)
+![img_01200.jpg](content/img_01200.jpg?raw=true)
+
+На train выборке (слева - GT, справа - PD):
+
+![img_00632.jpg](content/img_00632.jpg?raw=true)
+![img_00721.jpg](content/img_00721.jpg?raw=true)
+![img_00760.jpg](content/img_00760.jpg?raw=true)
+
+
 #### Очистка модели
+
 Изначалько тренировочный скрипт сохраняет лучшие модели для каждой метрики + 
 модель на последней эпохе. Он сохраняет не только веса сети, но и состояние 
 оптимизатора и LR_scheduler'а. Это нужно для продолжения обучения, но не нужно 
@@ -166,7 +185,7 @@ python3 demo/demo_app.py --images PATH_TO_FOLDER_WITH_IMAGES_ONLY --model-path d
 `demo/demo_app.py`. Позволяет прогнать переданную модель как на картинках 
 без разметки (с сохранением или непостредственной визуализацией результатов), 
 так и на сгенерированной с помощью `tools/prepare_markup.py` выборке 
-(в данном случае будет проведена оценка качества). 
+(в данном случае будет проведена оценка качества).
 
 
 ## Запланированные приемы для улучшения качества:
