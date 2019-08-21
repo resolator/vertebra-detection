@@ -53,7 +53,7 @@ def draw_bboxes(img, boxes, labels, shifted_labels=False, mean=None, std=None):
         img = img.cpu().numpy().transpose((1, 2, 0))
 
         # convert to uint8 for drawing
-        img = (img * 255).astype(np.uint8)
+        img = np.clip(img * 255, 0, 255).astype(np.uint8)
 
     for box, label in zip(boxes, labels):
         pts = bb2pts(box)
