@@ -8,8 +8,36 @@ from torch.utils.data import Dataset
 import custom_transforms as custom_t
 
 
-def get_transforms(crop_factor, h_flip_prob, v_flip_prob, mean, std,
+def get_transforms(crop_factor,
+                   h_flip_prob,
+                   v_flip_prob,
+                   mean,
+                   std,
                    center_crop=True):
+    """Make train/test transforms.
+
+    Parameters
+    ----------
+    crop_factor : float
+        Factor for determinate the target size (how much width and height we
+        should remove) Must be in range (0; 1).
+    h_flip_prob : float
+        Probability of flip.
+    v_flip_prob : float
+        Probability of flip.
+    std : List
+        Standart deviation for every channel (RGB order).
+    mean : List
+        Mean for every channel (RGB order).
+    center_crop : bool
+        Use center crop instead of bottom-right crop.
+
+    Returns
+    -------
+    tuple
+        Composed train and test transform.
+
+    """
     train_transforms = torchvision.transforms.Compose([
         custom_t.Crop(crop_factor, center_crop=center_crop),
         custom_t.RandomHorizontalFlip(h_flip_prob),
@@ -26,6 +54,16 @@ def get_transforms(crop_factor, h_flip_prob, v_flip_prob, mean, std,
 
 
 class VertebraDataset(Dataset):
+    """Custom dataset for FasterRCNN.
+
+    Attributes
+    ----------
+    transform : torchvision.transforms
+        Custom transforms.
+    samples : List
+        Loaded samples information from json file.
+
+    """
     def __init__(self, json_path, transform=None):
         with open(json_path) as f:
             self.samples = json.load(f)

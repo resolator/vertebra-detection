@@ -6,11 +6,23 @@ from torchvision.transforms import functional as F
 
 
 class Resize(object):
+    """Wrapper for processing custom input.
+
+    Input must be presented as dict with the following keys: 'img', 'bboxes'.
+
+    Attributes
+    ----------
+    width : int
+        Target width.
+    height : int
+        Target height.
+
+    """
     def __init__(self, width, height):
         self.width = width
         self.height = height
 
-    def bboxes_resize(self, img_size, bboxes):
+    def _bboxes_resize(self, img_size, bboxes):
         w_factor = self.width / img_size[0]
         h_factor = self.height / img_size[1]
 
@@ -20,7 +32,7 @@ class Resize(object):
                  int(bb[3] * h_factor)] for bb in bboxes]
 
     def __call__(self, sample):
-        sample['bboxes'] = self.bboxes_resize(
+        sample['bboxes'] = self._bboxes_resize(
             sample['img'].size, sample['bboxes']
         )
         sample['img'] = F.resize(sample['img'], (self.height, self.width))
@@ -29,7 +41,23 @@ class Resize(object):
 
 
 class Crop(object):
+    """Wrapper for processing custom input.
+
+    Input must be presented as dict with the following keys: 'img', 'bboxes'.
+
+    Attributes
+    ----------
+    crop_factor : float
+        Factor for determinate the target size (how much width and height we
+        should remove) Must be in range (0; 1).
+    center_crop : bool
+        Use center crop instead of bottom-right crop.
+
+    """
     def __init__(self, crop_factor, center_crop=False):
+        if 0 < crop_factor < 1:
+            raise AttributeError('"crop_factor" must be in range (0; 1)!')
+
         self.crop_factor = crop_factor
         self.center_crop = center_crop
 
@@ -53,6 +81,17 @@ class Crop(object):
 
 
 class RandomHorizontalFlip(object):
+    """Wrapper for processing custom input.
+
+    Flip image with their bounding box.
+    Input must be presented as dict with the following keys: 'img', 'bboxes'.
+
+    Attributes
+    ----------
+    prob : float
+        Probability of flip.
+
+    """
     def __init__(self, prob=0.5):
         self.prob = prob
 
@@ -69,6 +108,17 @@ class RandomHorizontalFlip(object):
 
 
 class RandomVerticalFlip(object):
+    """Wrapper for processing custom input.
+
+    Flip image with their bounding box.
+    Input must be presented as dict with the following keys: 'img', 'bboxes'.
+
+    Attributes
+    ----------
+    prob : float
+        Probability of flip.
+
+    """
     def __init__(self, prob=0.5):
         self.prob = prob
 
@@ -85,6 +135,7 @@ class RandomVerticalFlip(object):
 
 
 class ToTensor(object):
+    """Simple wrapper for processing custom input."""
     def __call__(self, sample):
         sample = {'img': F.to_tensor(sample['img']),
                   'bboxes': torch.tensor(sample['bboxes'], dtype=torch.float),
@@ -94,6 +145,7 @@ class ToTensor(object):
 
 
 class Normalize(object):
+    """Simple wrapper for processing custom input."""
     def __init__(self, mean, std):
         self.mean = mean
         self.std = std

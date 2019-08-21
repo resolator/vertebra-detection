@@ -66,7 +66,7 @@ def main():
 
     for model_path in models_paths:
         # model preparation
-        ckpt = torch.load(model_path)
+        ckpt = torch.load(model_path, map_location=device)
 
         model = models.detection.fasterrcnn_resnet50_fpn(pretrained=False,
                                                          num_classes=3)

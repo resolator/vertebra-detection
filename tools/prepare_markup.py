@@ -13,8 +13,8 @@ import matplotlib.pyplot as plt
 
 from tqdm import tqdm
 
-sys.path.append(os.path.join(sys.path[0], '../common'))
-from utils import calc_iou_bbox, draw_bboxes
+sys.path.append(os.path.join(sys.path[0], '../'))
+from common.utils import calc_iou_bbox, draw_bboxes
 
 
 def get_args():
