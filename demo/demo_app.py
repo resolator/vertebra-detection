@@ -31,7 +31,7 @@ def get_args():
     parser.add_argument('--save-to',
                         help='Path to dir for store classification results '
                              'instead of displaying them.')
-    parser.add_argument('--iou-th', type=float, default=0.6,
+    parser.add_argument('--iou-th', type=float, default=0.5,
                         help='Arg for remove intersecting boxes.')
 
     args = parser.parse_args()
