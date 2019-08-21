@@ -91,6 +91,10 @@ def main():
                       for k, v in output[0].items()}
             output = postprocessing([output], iou_th=args.iou_th)[0]
 
+            img = cv2.imread(img_path)
+            drawn_img = draw_bboxes(img, output['boxes'], output['labels'],
+                                    shifted_labels=True)
+
             # evaluate if markup file was passed
             if markup:
                 target = {
@@ -100,9 +104,14 @@ def main():
                 cur_m = np.array(calc_metrics(output, target))
                 [m.append(x) for x, m in zip(cur_m, metrics) if not isnan(x)]
 
-            img = cv2.imread(img_path)
-            drawn_img = draw_bboxes(img, output['boxes'], output['labels'],
-                                    shifted_labels=True)
+                img = cv2.imread(img_path)
+                gt_drawn_img = draw_bboxes(
+                    img,
+                    target['boxes'],
+                    target['labels'],
+                    shifted_labels=True
+                )
+                drawn_img = np.concatenate([gt_drawn_img, drawn_img], axis=1)
 
             if args.save_to is None:
                 cv2.namedWindow('img', cv2.WINDOW_NORMAL)
