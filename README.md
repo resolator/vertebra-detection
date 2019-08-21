@@ -11,7 +11,7 @@ sudo -H pip3 install -r requirements.txt
 
 - Используйте скрипт `demo_app.py` на своих данных:
 ```bash
-python3 demo/demo_app.py --images PATH_TO_FOLDER_WITH_IMAGES_ONLY
+python3 demo/demo_app.py --images PATH_TO_FOLDER_WITH_IMAGES_ONLY --model-path data/model.pth
 ```
 
 ## Постановка задачи
