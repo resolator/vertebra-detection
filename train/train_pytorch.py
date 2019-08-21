@@ -248,7 +248,7 @@ def evaluate_one_epoch(model,
     for idx, (m_name, m, m_best) in enumerate(
             zip(m_names, metrics, best_metrics)):
         m = np.mean(m)
-        print(f'Test mean {m_name}: {m}')
+        print(f'Test mean {m_name}: {m} (best is {m_best})')
         writer.add_scalar('Test/mean_' + m_name, m, ep)
 
         if m > m_best:
@@ -330,12 +330,12 @@ def main():
     else:
         epochs = args.epochs
 
-    lr_scheduler = None
+    lr_s = None
     if args.lr_decay:
         warmup_factor = 1. / 1000
         warmup_iters = min(1000, len(train_loader) - 1)
 
-        lr_scheduler = warmup_lr_scheduler(
+        lr_s = warmup_lr_scheduler(
             optimizer, warmup_iters, warmup_factor
         )
 
@@ -349,7 +349,7 @@ def main():
     # main train cycle
     while ep != epochs:
         train_one_epoch(model, optimizer, train_loader, device, ep, writer,
-                        lr_scheduler)
+                        lr_s)
         save_model = evaluate_one_epoch(
             model,
             test_loader,
@@ -366,7 +366,7 @@ def main():
             torch.save(
                 {'model': model.state_dict(),
                  'optimizer': optimizer.state_dict(),
-                 'lr_scheduler': lr_scheduler.state_dict(),
+                 'lr_scheduler': lr_s if lr_s is None else lr_s.state_dict(),
                  'args': args,
                  'epoch': ep},
                 os.path.join(models_path, f'{m_name}.pth')
