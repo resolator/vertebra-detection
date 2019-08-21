@@ -5,6 +5,7 @@
 
 - Установите зависимости используя следующую команду:
 ```bash
+sudo apt-get install git-lfs
 sudo -H pip3 install -r requirements.txt
 ```
 
@@ -118,7 +119,7 @@ python3 demo/demo_app.py --images PATH_TO_FOLDER_WITH_IMAGES_ONLY
 Скрипт поддерживает запуск с конфиг файлом (параметр `--config`).
 
 
-## Проесс обучения
+## Процесс обучения
 
 Обучение проходило на ноутбуке со следующими параметрами:
 - Видеокарта: NVIDIA GeForce 1070
@@ -128,7 +129,8 @@ python3 demo/demo_app.py --images PATH_TO_FOLDER_WITH_IMAGES_ONLY
 
 Процесс обучения был разработан на основе фреймворка PyTorch. Скрипт для 
 обучения по пути `train/train_pytorch.py`. Было проведено несколько 
-экспериментов и лучшие параметры содержатся в `train/train_pytorch.cfg`. 
+экспериментов и лучшие параметры для обучения содержатся в 
+`train/train_pytorch.cfg`. 
 
 Особенности процесса обучения:
 - Аугментация: случайный flip по `x` и `y`, центральный кроп
@@ -137,8 +139,12 @@ python3 demo/demo_app.py --images PATH_TO_FOLDER_WITH_IMAGES_ONLY
 
 Процесс обучения лучшей модели:
 
-[image]()
+![train_process](content/train_process.png?raw=true)
+
 итоговые метрики для трейт\тест\юнайтед
+
+
+clean model
 
 
 ## Демонстрация и оценка качества

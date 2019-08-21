@@ -13,7 +13,7 @@ def get_args():
         description='Script for clean model.'
     )
     parser.add_argument('--model-path', required=True,
-                        help='Path to model of dir with models.')
+                        help='Path to model or dir with models.')
     parser.add_argument('--save-to', required=True,
                         help='Path to saving dir.')
 

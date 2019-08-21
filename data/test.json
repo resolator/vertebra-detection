@@ -1,0 +1,5443 @@
+[
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01083.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    183,
+                    58,
+                    213,
+                    82
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    176,
+                    89,
+                    211,
+                    109
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    173,
+                    119,
+                    210,
+                    137
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    168,
+                    146,
+                    212,
+                    164
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    165,
+                    170,
+                    210,
+                    185
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01074.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    169,
+                    90,
+                    239,
+                    123
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    177,
+                    126,
+                    241,
+                    146
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    180,
+                    152,
+                    236,
+                    171
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    181,
+                    178,
+                    230,
+                    197
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    183,
+                    199,
+                    231,
+                    218
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01006.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    176,
+                    88,
+                    225,
+                    130
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    168,
+                    124,
+                    220,
+                    145
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    168,
+                    149,
+                    225,
+                    171
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    161,
+                    167,
+                    216,
+                    192
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    155,
+                    189,
+                    214,
+                    211
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01008.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    188,
+                    98,
+                    213,
+                    122
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    179,
+                    124,
+                    214,
+                    144
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    174,
+                    149,
+                    215,
+                    169
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    172,
+                    170,
+                    208,
+                    187
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    166,
+                    190,
+                    207,
+                    210
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01019.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    168,
+                    80,
+                    215,
+                    111
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    158,
+                    110,
+                    218,
+                    132
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    167,
+                    138,
+                    210,
+                    160
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    168,
+                    164,
+                    211,
+                    183
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    160,
+                    188,
+                    206,
+                    209
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    156,
+                    216,
+                    207,
+                    234
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01036.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    124,
+                    128,
+                    170,
+                    160
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    110,
+                    158,
+                    162,
+                    183
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    122,
+                    190,
+                    172,
+                    210
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    116,
+                    213,
+                    170,
+                    230
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    124,
+                    225,
+                    169,
+                    256
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    144,
+                    249,
+                    179,
+                    279
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01082.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    188,
+                    58,
+                    213,
+                    80
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    182,
+                    87,
+                    211,
+                    107
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    177,
+                    116,
+                    209,
+                    138
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    173,
+                    140,
+                    205,
+                    160
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    171,
+                    166,
+                    203,
+                    186
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01059.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    204,
+                    64,
+                    231,
+                    93
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    203,
+                    94,
+                    240,
+                    113
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    206,
+                    120,
+                    241,
+                    137
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    204,
+                    143,
+                    245,
+                    163
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    209,
+                    170,
+                    247,
+                    187
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01048.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    163,
+                    99,
+                    212,
+                    125
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    156,
+                    129,
+                    212,
+                    153
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    158,
+                    162,
+                    216,
+                    181
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    165,
+                    179,
+                    214,
+                    204
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    166,
+                    204,
+                    218,
+                    233
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01057.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    207,
+                    68,
+                    234,
+                    90
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    206,
+                    94,
+                    236,
+                    113
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    206,
+                    118,
+                    241,
+                    138
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    206,
+                    144,
+                    248,
+                    162
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    207,
+                    168,
+                    247,
+                    189
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01070.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    186,
+                    90,
+                    221,
+                    117
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    185,
+                    122,
+                    226,
+                    142
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    186,
+                    149,
+                    224,
+                    169
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    179,
+                    177,
+                    224,
+                    191
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    175,
+                    201,
+                    222,
+                    218
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01086.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    179,
+                    60,
+                    214,
+                    81
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    173,
+                    85,
+                    210,
+                    105
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    174,
+                    117,
+                    206,
+                    137
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    171,
+                    148,
+                    206,
+                    165
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    166,
+                    169,
+                    207,
+                    186
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01022.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    176,
+                    83,
+                    209,
+                    107
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    171,
+                    110,
+                    206,
+                    129
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    170,
+                    137,
+                    210,
+                    159
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    165,
+                    163,
+                    211,
+                    185
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    165,
+                    188,
+                    206,
+                    209
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01073.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    187,
+                    97,
+                    218,
+                    121
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    184,
+                    124,
+                    223,
+                    145
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    185,
+                    153,
+                    227,
+                    169
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    185,
+                    175,
+                    222,
+                    194
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    182,
+                    199,
+                    223,
+                    217
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01071.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    181,
+                    94,
+                    223,
+                    117
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    187,
+                    124,
+                    224,
+                    143
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    184,
+                    150,
+                    223,
+                    170
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    183,
+                    174,
+                    224,
+                    194
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    181,
+                    200,
+                    221,
+                    216
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01058.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    204,
+                    66,
+                    233,
+                    94
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    201,
+                    92,
+                    236,
+                    113
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    208,
+                    120,
+                    240,
+                    137
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    207,
+                    143,
+                    241,
+                    161
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    205,
+                    170,
+                    254,
+                    190
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01009.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    183,
+                    123,
+                    213,
+                    143
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    178,
+                    146,
+                    213,
+                    168
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    174,
+                    170,
+                    214,
+                    187
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    169,
+                    192,
+                    204,
+                    210
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01060.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    203,
+                    68,
+                    238,
+                    94
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    203,
+                    97,
+                    242,
+                    112
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    207,
+                    118,
+                    244,
+                    138
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    208,
+                    148,
+                    244,
+                    163
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    209,
+                    171,
+                    246,
+                    188
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01049.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    161,
+                    125,
+                    203,
+                    148
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    164,
+                    158,
+                    203,
+                    173
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    167,
+                    181,
+                    212,
+                    200
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    170,
+                    206,
+                    218,
+                    225
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01018.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    175,
+                    82,
+                    205,
+                    106
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    174,
+                    108,
+                    205,
+                    132
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    173,
+                    135,
+                    205,
+                    156
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    169,
+                    162,
+                    202,
+                    183
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    167,
+                    188,
+                    201,
+                    207
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01033.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    129,
+                    132,
+                    161,
+                    160
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    122,
+                    164,
+                    162,
+                    182
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    123,
+                    186,
+                    163,
+                    209
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    129,
+                    210,
+                    170,
+                    227
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    127,
+                    229,
+                    175,
+                    250
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01037.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    132,
+                    128,
+                    165,
+                    161
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    122,
+                    163,
+                    166,
+                    181
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    117,
+                    186,
+                    162,
+                    205
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    119,
+                    208,
+                    170,
+                    223
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    133,
+                    229,
+                    173,
+                    244
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01004.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    180,
+                    100,
+                    216,
+                    123
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    181,
+                    126,
+                    212,
+                    143
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    179,
+                    148,
+                    215,
+                    167
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    168,
+                    169,
+                    211,
+                    187
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    166,
+                    190,
+                    208,
+                    208
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01087.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    187,
+                    62,
+                    215,
+                    80
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    176,
+                    87,
+                    214,
+                    102
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    165,
+                    116,
+                    210,
+                    133
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    167,
+                    142,
+                    211,
+                    159
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    166,
+                    166,
+                    210,
+                    184
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00226.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    172,
+                    107,
+                    201,
+                    119
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    168,
+                    132,
+                    193,
+                    144
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    164,
+                    156,
+                    188,
+                    168
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    164,
+                    178,
+                    189,
+                    194
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    165,
+                    203,
+                    192,
+                    222
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00264.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    181,
+                    147,
+                    208,
+                    163
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    178,
+                    171,
+                    206,
+                    189
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    174,
+                    194,
+                    206,
+                    213
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    171,
+                    217,
+                    203,
+                    237
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    164,
+                    240,
+                    199,
+                    257
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00279.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    176,
+                    137,
+                    204,
+                    154
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    173,
+                    158,
+                    202,
+                    173
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    171,
+                    201,
+                    204,
+                    216
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    171,
+                    222,
+                    204,
+                    241
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    173,
+                    179,
+                    201,
+                    196
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00292.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    155,
+                    124,
+                    192,
+                    141
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    157,
+                    152,
+                    188,
+                    170
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    154,
+                    180,
+                    188,
+                    198
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    154,
+                    205,
+                    185,
+                    225
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    155,
+                    231,
+                    187,
+                    254
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00227.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    173,
+                    102,
+                    198,
+                    120
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    167,
+                    129,
+                    191,
+                    147
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    164,
+                    156,
+                    188,
+                    170
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    162,
+                    176,
+                    192,
+                    196
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    165,
+                    204,
+                    193,
+                    223
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00342.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    155,
+                    96,
+                    181,
+                    108
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    154,
+                    121,
+                    180,
+                    135
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    149,
+                    143,
+                    176,
+                    161
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    153,
+                    164,
+                    183,
+                    184
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    159,
+                    186,
+                    188,
+                    208
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00317.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    147,
+                    141,
+                    189,
+                    159
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    140,
+                    171,
+                    180,
+                    191
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    136,
+                    200,
+                    178,
+                    218
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    135,
+                    247,
+                    183,
+                    276
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    139,
+                    219,
+                    184,
+                    245
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00304.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    147,
+                    98,
+                    185,
+                    124
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    151,
+                    124,
+                    194,
+                    149
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    159,
+                    146,
+                    202,
+                    169
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    161,
+                    167,
+                    206,
+                    194
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    163,
+                    194,
+                    209,
+                    217
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00331.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    187,
+                    102,
+                    217,
+                    123
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    182,
+                    130,
+                    219,
+                    144
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    178,
+                    153,
+                    213,
+                    167
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    167,
+                    175,
+                    206,
+                    190
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    170,
+                    195,
+                    204,
+                    216
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00394.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    144,
+                    97,
+                    179,
+                    109
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    140,
+                    119,
+                    176,
+                    132
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    140,
+                    141,
+                    175,
+                    157
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    136,
+                    162,
+                    176,
+                    185
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    136,
+                    182,
+                    177,
+                    207
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00343.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    146,
+                    95,
+                    183,
+                    114
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    144,
+                    121,
+                    180,
+                    138
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    146,
+                    142,
+                    180,
+                    163
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    153,
+                    187,
+                    190,
+                    212
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    151,
+                    163,
+                    185,
+                    186
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00368.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    155,
+                    99,
+                    190,
+                    115
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    154,
+                    163,
+                    184,
+                    188
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    167,
+                    182,
+                    197,
+                    208
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    152,
+                    140,
+                    185,
+                    161
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    150,
+                    121,
+                    184,
+                    137
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00305.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    148,
+                    98,
+                    186,
+                    124
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    154,
+                    124,
+                    194,
+                    151
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    160,
+                    146,
+                    200,
+                    171
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    170,
+                    214,
+                    212,
+                    242
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    162,
+                    167,
+                    207,
+                    194
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    168,
+                    193,
+                    216,
+                    214
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00358.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    119,
+                    75,
+                    159,
+                    93
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    115,
+                    108,
+                    152,
+                    129
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    114,
+                    138,
+                    154,
+                    165
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    122,
+                    161,
+                    164,
+                    200
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    138,
+                    181,
+                    182,
+                    232
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00371.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    162,
+                    79,
+                    194,
+                    92
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    157,
+                    163,
+                    184,
+                    185
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    154,
+                    102,
+                    190,
+                    116
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    148,
+                    123,
+                    184,
+                    137
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    149,
+                    145,
+                    183,
+                    159
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00355.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    121,
+                    75,
+                    161,
+                    93
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    115,
+                    107,
+                    155,
+                    128
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    116,
+                    138,
+                    154,
+                    163
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    127,
+                    164,
+                    163,
+                    195
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    138,
+                    188,
+                    185,
+                    224
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00386.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    139,
+                    143,
+                    179,
+                    169
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    130,
+                    172,
+                    173,
+                    202
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    146,
+                    256,
+                    190,
+                    286
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    136,
+                    207,
+                    178,
+                    232
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    134,
+                    231,
+                    190,
+                    259
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00370.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    157,
+                    75,
+                    193,
+                    93
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    154,
+                    104,
+                    188,
+                    116
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    149,
+                    123,
+                    185,
+                    138
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    152,
+                    143,
+                    182,
+                    161
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    156,
+                    163,
+                    190,
+                    185
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00397.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    137,
+                    142,
+                    176,
+                    161
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    139,
+                    117,
+                    180,
+                    141
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    137,
+                    161,
+                    180,
+                    187
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    145,
+                    99,
+                    184,
+                    110
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    140,
+                    185,
+                    184,
+                    207
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00329.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    188,
+                    103,
+                    221,
+                    124
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    183,
+                    132,
+                    221,
+                    146
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    173,
+                    153,
+                    217,
+                    168
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    172,
+                    176,
+                    209,
+                    189
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    166,
+                    195,
+                    206,
+                    217
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00332.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    185,
+                    108,
+                    217,
+                    125
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    185,
+                    129,
+                    221,
+                    147
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    176,
+                    151,
+                    215,
+                    169
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    165,
+                    173,
+                    211,
+                    190
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    169,
+                    195,
+                    205,
+                    216
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00347.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    146,
+                    118,
+                    180,
+                    138
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    150,
+                    142,
+                    181,
+                    163
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    150,
+                    166,
+                    184,
+                    188
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    157,
+                    187,
+                    188,
+                    211
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    163,
+                    209,
+                    200,
+                    234
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00385.jpg",
+        "annotation": [
+            {
+                "label": 2,
+                "bbox": [
+                    142,
+                    120,
+                    185,
+                    140
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    136,
+                    177,
+                    174,
+                    202
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    135,
+                    146,
+                    178,
+                    168
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    132,
+                    205,
+                    180,
+                    228
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    139,
+                    229,
+                    190,
+                    260
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00354.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    125,
+                    72,
+                    159,
+                    89
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    116,
+                    106,
+                    154,
+                    126
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    117,
+                    138,
+                    154,
+                    159
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    126,
+                    167,
+                    160,
+                    193
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    140,
+                    192,
+                    178,
+                    228
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00381.jpg",
+        "annotation": [
+            {
+                "label": 2,
+                "bbox": [
+                    131,
+                    205,
+                    172,
+                    228
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    134,
+                    178,
+                    173,
+                    196
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    141,
+                    121,
+                    184,
+                    143
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    132,
+                    149,
+                    178,
+                    170
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    139,
+                    228,
+                    182,
+                    258
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00359.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    120,
+                    73,
+                    159,
+                    93
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    119,
+                    105,
+                    152,
+                    129
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    119,
+                    138,
+                    154,
+                    162
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    129,
+                    165,
+                    163,
+                    193
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    142,
+                    185,
+                    179,
+                    225
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00395.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    142,
+                    97,
+                    185,
+                    111
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    138,
+                    142,
+                    174,
+                    160
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    148,
+                    207,
+                    184,
+                    233
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    133,
+                    119,
+                    180,
+                    138
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    138,
+                    162,
+                    177,
+                    185
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    140,
+                    184,
+                    182,
+                    207
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00319.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    147,
+                    142,
+                    189,
+                    161
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    143,
+                    172,
+                    183,
+                    188
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    137,
+                    199,
+                    181,
+                    216
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    140,
+                    225,
+                    182,
+                    244
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    138,
+                    247,
+                    183,
+                    272
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00357.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    122,
+                    73,
+                    164,
+                    94
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    111,
+                    108,
+                    155,
+                    129
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    116,
+                    139,
+                    157,
+                    164
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    139,
+                    187,
+                    184,
+                    225
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    126,
+                    164,
+                    164,
+                    198
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00346.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    147,
+                    95,
+                    184,
+                    113
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    149,
+                    119,
+                    178,
+                    138
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    145,
+                    145,
+                    181,
+                    160
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    151,
+                    164,
+                    187,
+                    186
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    156,
+                    186,
+                    194,
+                    210
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00384.jpg",
+        "annotation": [
+            {
+                "label": 2,
+                "bbox": [
+                    135,
+                    179,
+                    174,
+                    200
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    141,
+                    120,
+                    186,
+                    137
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    133,
+                    150,
+                    178,
+                    169
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    140,
+                    205,
+                    178,
+                    230
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    137,
+                    230,
+                    188,
+                    254
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00383.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    140,
+                    121,
+                    184,
+                    141
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    132,
+                    149,
+                    181,
+                    174
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    130,
+                    176,
+                    177,
+                    201
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    140,
+                    229,
+                    184,
+                    259
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    137,
+                    207,
+                    175,
+                    230
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00344.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    149,
+                    96,
+                    182,
+                    114
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    148,
+                    120,
+                    181,
+                    137
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    150,
+                    143,
+                    181,
+                    162
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    154,
+                    188,
+                    190,
+                    213
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    149,
+                    165,
+                    187,
+                    185
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00306.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    149,
+                    97,
+                    185,
+                    124
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    159,
+                    121,
+                    196,
+                    146
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    159,
+                    150,
+                    200,
+                    173
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    159,
+                    169,
+                    204,
+                    195
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    169,
+                    192,
+                    208,
+                    214
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00328.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    187,
+                    106,
+                    217,
+                    120
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    177,
+                    131,
+                    219,
+                    145
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    175,
+                    151,
+                    216,
+                    167
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    168,
+                    172,
+                    206,
+                    189
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    167,
+                    195,
+                    204,
+                    214
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00382.jpg",
+        "annotation": [
+            {
+                "label": 2,
+                "bbox": [
+                    143,
+                    231,
+                    186,
+                    256
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    131,
+                    179,
+                    177,
+                    201
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    140,
+                    122,
+                    185,
+                    138
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    133,
+                    150,
+                    178,
+                    171
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    137,
+                    207,
+                    176,
+                    228
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00398.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    142,
+                    96,
+                    181,
+                    110
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    138,
+                    141,
+                    173,
+                    157
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    138,
+                    118,
+                    180,
+                    134
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    138,
+                    161,
+                    178,
+                    186
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    139,
+                    185,
+                    179,
+                    208
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00302.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    159,
+                    148,
+                    195,
+                    168
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    155,
+                    116,
+                    193,
+                    136
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    163,
+                    170,
+                    203,
+                    194
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    169,
+                    197,
+                    208,
+                    216
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    168,
+                    218,
+                    213,
+                    240
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00345.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    146,
+                    96,
+                    183,
+                    111
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    147,
+                    120,
+                    181,
+                    140
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    148,
+                    145,
+                    180,
+                    160
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    155,
+                    189,
+                    190,
+                    209
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    151,
+                    165,
+                    188,
+                    186
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00330.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    185,
+                    105,
+                    221,
+                    121
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    184,
+                    129,
+                    221,
+                    144
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    175,
+                    152,
+                    212,
+                    167
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    167,
+                    175,
+                    209,
+                    189
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    172,
+                    194,
+                    205,
+                    214
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00320.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    147,
+                    148,
+                    188,
+                    159
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    142,
+                    171,
+                    183,
+                    187
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    135,
+                    196,
+                    181,
+                    221
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    138,
+                    225,
+                    184,
+                    245
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    135,
+                    249,
+                    181,
+                    273
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00356.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    115,
+                    72,
+                    163,
+                    98
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    112,
+                    107,
+                    158,
+                    131
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    112,
+                    138,
+                    154,
+                    165
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    125,
+                    164,
+                    164,
+                    194
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    142,
+                    190,
+                    179,
+                    226
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00372.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    155,
+                    163,
+                    182,
+                    185
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    159,
+                    79,
+                    197,
+                    94
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    154,
+                    100,
+                    192,
+                    114
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    153,
+                    119,
+                    188,
+                    134
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    147,
+                    140,
+                    183,
+                    158
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00369.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    157,
+                    77,
+                    192,
+                    90
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    154,
+                    104,
+                    189,
+                    116
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    153,
+                    124,
+                    183,
+                    135
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    154,
+                    166,
+                    185,
+                    188
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    150,
+                    145,
+                    183,
+                    162
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00316.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    144,
+                    171,
+                    182,
+                    187
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    137,
+                    197,
+                    178,
+                    218
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    145,
+                    273,
+                    185,
+                    299
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    138,
+                    246,
+                    179,
+                    272
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    137,
+                    225,
+                    181,
+                    242
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00318.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    148,
+                    142,
+                    188,
+                    158
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    142,
+                    172,
+                    181,
+                    186
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    141,
+                    199,
+                    179,
+                    217
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    135,
+                    224,
+                    183,
+                    244
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    138,
+                    248,
+                    182,
+                    274
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_00303.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    159,
+                    146,
+                    195,
+                    170
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    164,
+                    194,
+                    205,
+                    217
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    143,
+                    98,
+                    185,
+                    125
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    153,
+                    125,
+                    193,
+                    152
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    160,
+                    171,
+                    204,
+                    197
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01212.jpg",
+        "annotation": [
+            {
+                "label": 2,
+                "bbox": [
+                    153,
+                    120,
+                    186,
+                    150
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    145,
+                    155,
+                    182,
+                    181
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    141,
+                    182,
+                    181,
+                    207
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    135,
+                    212,
+                    174,
+                    233
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    138,
+                    244,
+                    171,
+                    263
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01280.jpg",
+        "annotation": [
+            {
+                "label": 2,
+                "bbox": [
+                    160,
+                    137,
+                    200,
+                    161
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    158,
+                    164,
+                    196,
+                    187
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    157,
+                    189,
+                    200,
+                    208
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    154,
+                    212,
+                    206,
+                    231
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    156,
+                    233,
+                    200,
+                    249
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01281.jpg",
+        "annotation": [
+            {
+                "label": 2,
+                "bbox": [
+                    165,
+                    136,
+                    198,
+                    160
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    157,
+                    164,
+                    200,
+                    184
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    159,
+                    188,
+                    197,
+                    209
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    161,
+                    211,
+                    203,
+                    224
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    160,
+                    231,
+                    200,
+                    248
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01294.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    184,
+                    88,
+                    222,
+                    111
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    184,
+                    114,
+                    222,
+                    133
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    182,
+                    137,
+                    224,
+                    156
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    186,
+                    161,
+                    223,
+                    178
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    189,
+                    183,
+                    224,
+                    203
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01216.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    150,
+                    126,
+                    187,
+                    150
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    143,
+                    158,
+                    181,
+                    181
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    136,
+                    189,
+                    181,
+                    209
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    131,
+                    214,
+                    177,
+                    235
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    136,
+                    244,
+                    176,
+                    266
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01226.jpg",
+        "annotation": [
+            {
+                "label": 2,
+                "bbox": [
+                    179,
+                    97,
+                    210,
+                    124
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    174,
+                    127,
+                    210,
+                    152
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    173,
+                    155,
+                    210,
+                    175
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    169,
+                    177,
+                    202,
+                    196
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    173,
+                    208,
+                    204,
+                    224
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01229.jpg",
+        "annotation": [
+            {
+                "label": 2,
+                "bbox": [
+                    179,
+                    102,
+                    212,
+                    129
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    172,
+                    129,
+                    209,
+                    150
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    173,
+                    156,
+                    206,
+                    175
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    170,
+                    179,
+                    205,
+                    200
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    169,
+                    205,
+                    206,
+                    224
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01200.jpg",
+        "annotation": [
+            {
+                "label": 2,
+                "bbox": [
+                    186,
+                    128,
+                    225,
+                    149
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    178,
+                    153,
+                    221,
+                    173
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    174,
+                    178,
+                    219,
+                    197
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    174,
+                    202,
+                    217,
+                    219
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01265.jpg",
+        "annotation": [
+            {
+                "label": 2,
+                "bbox": [
+                    138,
+                    139,
+                    175,
+                    165
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    138,
+                    190,
+                    187,
+                    217
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    126,
+                    170,
+                    173,
+                    190
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    141,
+                    221,
+                    190,
+                    239
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01270.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    144,
+                    124,
+                    180,
+                    141
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    139,
+                    143,
+                    179,
+                    164
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    138,
+                    170,
+                    171,
+                    186
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    127,
+                    195,
+                    184,
+                    220
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    148,
+                    213,
+                    185,
+                    241
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01204.jpg",
+        "annotation": [
+            {
+                "label": 2,
+                "bbox": [
+                    192,
+                    102,
+                    230,
+                    126
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    182,
+                    128,
+                    223,
+                    146
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    177,
+                    151,
+                    220,
+                    170
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    175,
+                    175,
+                    218,
+                    195
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    167,
+                    200,
+                    219,
+                    216
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01279.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    156,
+                    134,
+                    203,
+                    162
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    157,
+                    165,
+                    206,
+                    185
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    151,
+                    191,
+                    207,
+                    206
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    156,
+                    211,
+                    206,
+                    226
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    158,
+                    232,
+                    206,
+                    248
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01267.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    140,
+                    121,
+                    178,
+                    140
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    137,
+                    148,
+                    178,
+                    165
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    136,
+                    173,
+                    174,
+                    190
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    136,
+                    194,
+                    181,
+                    213
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    143,
+                    219,
+                    184,
+                    237
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01227.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    177,
+                    102,
+                    209,
+                    123
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    171,
+                    133,
+                    212,
+                    150
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    166,
+                    156,
+                    207,
+                    173
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    165,
+                    180,
+                    211,
+                    200
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    174,
+                    204,
+                    206,
+                    225
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01202.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    192,
+                    107,
+                    228,
+                    124
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    176,
+                    128,
+                    224,
+                    151
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    179,
+                    155,
+                    216,
+                    171
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    179,
+                    178,
+                    216,
+                    195
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    175,
+                    202,
+                    214,
+                    217
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01252.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    151,
+                    136,
+                    188,
+                    153
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    148,
+                    163,
+                    189,
+                    180
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    149,
+                    188,
+                    195,
+                    202
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    153,
+                    207,
+                    195,
+                    234
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    160,
+                    231,
+                    194,
+                    258
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01256.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    157,
+                    156,
+                    188,
+                    178
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    151,
+                    186,
+                    193,
+                    199
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    146,
+                    209,
+                    200,
+                    225
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    153,
+                    233,
+                    204,
+                    253
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01291.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    183,
+                    86,
+                    219,
+                    109
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    184,
+                    116,
+                    226,
+                    130
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    183,
+                    138,
+                    226,
+                    153
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    175,
+                    156,
+                    226,
+                    179
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    185,
+                    184,
+                    226,
+                    201
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01253.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    151,
+                    134,
+                    190,
+                    158
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    151,
+                    163,
+                    188,
+                    178
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    149,
+                    188,
+                    193,
+                    206
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    147,
+                    212,
+                    201,
+                    227
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    158,
+                    234,
+                    201,
+                    255
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01201.jpg",
+        "annotation": [
+            {
+                "label": 2,
+                "bbox": [
+                    186,
+                    106,
+                    230,
+                    123
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    180,
+                    127,
+                    226,
+                    153
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    178,
+                    155,
+                    215,
+                    173
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    175,
+                    178,
+                    216,
+                    195
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    176,
+                    199,
+                    214,
+                    221
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01203.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    189,
+                    107,
+                    228,
+                    126
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    182,
+                    134,
+                    224,
+                    146
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    176,
+                    155,
+                    215,
+                    173
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    174,
+                    175,
+                    212,
+                    198
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    175,
+                    200,
+                    209,
+                    224
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01266.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    138,
+                    120,
+                    176,
+                    143
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    133,
+                    146,
+                    173,
+                    163
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    139,
+                    169,
+                    168,
+                    197
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    140,
+                    191,
+                    183,
+                    219
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    142,
+                    214,
+                    187,
+                    243
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01268.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    142,
+                    123,
+                    181,
+                    141
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    133,
+                    148,
+                    180,
+                    165
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    140,
+                    168,
+                    171,
+                    193
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    144,
+                    196,
+                    180,
+                    222
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    145,
+                    214,
+                    188,
+                    244
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01254.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    147,
+                    138,
+                    185,
+                    155
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    151,
+                    163,
+                    184,
+                    185
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    155,
+                    183,
+                    190,
+                    209
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    152,
+                    208,
+                    199,
+                    231
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    161,
+                    229,
+                    199,
+                    260
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01292.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    181,
+                    87,
+                    224,
+                    107
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    187,
+                    115,
+                    221,
+                    132
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    187,
+                    138,
+                    220,
+                    156
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    192,
+                    160,
+                    224,
+                    182
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    192,
+                    184,
+                    224,
+                    204
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01269.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    148,
+                    123,
+                    176,
+                    145
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    133,
+                    148,
+                    175,
+                    167
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    133,
+                    173,
+                    175,
+                    194
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    137,
+                    194,
+                    180,
+                    220
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    141,
+                    216,
+                    194,
+                    241
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01217.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    151,
+                    129,
+                    189,
+                    151
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    136,
+                    159,
+                    182,
+                    178
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    134,
+                    184,
+                    178,
+                    209
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    135,
+                    212,
+                    175,
+                    239
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    134,
+                    238,
+                    178,
+                    269
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01255.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    149,
+                    134,
+                    191,
+                    155
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    145,
+                    160,
+                    190,
+                    181
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    150,
+                    186,
+                    190,
+                    205
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    151,
+                    210,
+                    200,
+                    226
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    153,
+                    234,
+                    199,
+                    253
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01293.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    184,
+                    87,
+                    223,
+                    112
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    184,
+                    113,
+                    225,
+                    134
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    186,
+                    137,
+                    222,
+                    157
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    185,
+                    160,
+                    226,
+                    178
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    187,
+                    182,
+                    230,
+                    202
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01228.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    179,
+                    103,
+                    215,
+                    126
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    175,
+                    132,
+                    207,
+                    153
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    171,
+                    155,
+                    207,
+                    178
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    167,
+                    181,
+                    205,
+                    200
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    168,
+                    203,
+                    210,
+                    227
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01243.jpg",
+        "annotation": [
+            {
+                "label": 2,
+                "bbox": [
+                    169,
+                    111,
+                    218,
+                    135
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    171,
+                    136,
+                    213,
+                    151
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    172,
+                    162,
+                    216,
+                    182
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    175,
+                    187,
+                    222,
+                    206
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    177,
+                    212,
+                    227,
+                    236
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01278.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    169,
+                    137,
+                    194,
+                    161
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    159,
+                    165,
+                    200,
+                    181
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    155,
+                    187,
+                    201,
+                    208
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    153,
+                    211,
+                    204,
+                    226
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    157,
+                    229,
+                    206,
+                    247
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01282.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    162,
+                    135,
+                    201,
+                    160
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    159,
+                    164,
+                    200,
+                    184
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    153,
+                    188,
+                    204,
+                    206
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    154,
+                    211,
+                    203,
+                    226
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    157,
+                    232,
+                    209,
+                    248
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01283.jpg",
+        "annotation": [
+            {
+                "label": 2,
+                "bbox": [
+                    164,
+                    134,
+                    201,
+                    159
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    158,
+                    159,
+                    200,
+                    184
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    150,
+                    184,
+                    200,
+                    203
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    154,
+                    207,
+                    204,
+                    226
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    158,
+                    231,
+                    205,
+                    249
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01241.jpg",
+        "annotation": [
+            {
+                "label": 2,
+                "bbox": [
+                    180,
+                    86,
+                    226,
+                    116
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    169,
+                    117,
+                    216,
+                    136
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    170,
+                    138,
+                    208,
+                    155
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    173,
+                    159,
+                    215,
+                    178
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    175,
+                    185,
+                    214,
+                    203
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01215.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    150,
+                    126,
+                    191,
+                    152
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    141,
+                    158,
+                    183,
+                    183
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    131,
+                    188,
+                    184,
+                    211
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    124,
+                    214,
+                    177,
+                    233
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    131,
+                    239,
+                    177,
+                    264
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01295.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    186,
+                    80,
+                    219,
+                    105
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    182,
+                    108,
+                    222,
+                    132
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    183,
+                    136,
+                    222,
+                    156
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    183,
+                    158,
+                    226,
+                    179
+                ]
+            },
+            {
+                "label": 1,
+                "bbox": [
+                    185,
+                    182,
+                    229,
+                    200
+                ]
+            }
+        ]
+    },
+    {
+        "img_path": "/home/dusiak/data/vertebra/images/img_01213.jpg",
+        "annotation": [
+            {
+                "label": 1,
+                "bbox": [
+                    147,
+                    127,
+                    188,
+                    151
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    143,
+                    160,
+                    185,
+                    181
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    135,
+                    186,
+                    181,
+                    210
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    129,
+                    214,
+                    178,
+                    236
+                ]
+            },
+            {
+                "label": 2,
+                "bbox": [
+                    133,
+                    241,
+                    178,
+                    263
+                ]
+            }
+        ]
+    }
+]
