@@ -17,9 +17,34 @@ def bb2pts(bb):
 
 
 def draw_bboxes(img, boxes, labels, shifted_labels=False, mean=None, std=None):
+    """Draw bounding box at the image.
+
+    Parameters
+    ----------
+    img : numpy array or tensor
+        Image for drawing.
+    boxes : List
+        Boxes for drawing
+    labels : List
+        Labels for each box.
+    shifted_labels : bool
+        Set it True if negative label = 1 and positive label = 2.
+    std : List
+        Standart deviation for every channel (RGB order). You have to pass it
+        if the img is a tensor.
+    mean : List
+        Mean for every channel (RGB order). You have to pass it if the img is
+        a tensor.
+
+    Returns
+    -------
+    numpy array
+        Drawn img.
+
+    """
     from_tensor = (mean is not None) and (std is not None)
     if from_tensor:
-        img = img.detach()
+        img = img.clone().detach()
         # denormalize
         for t, m, s in zip(img, mean, std):
             t.mul_(s).add_(m)
@@ -28,7 +53,7 @@ def draw_bboxes(img, boxes, labels, shifted_labels=False, mean=None, std=None):
         img = img.cpu().numpy().transpose((1, 2, 0))
 
         # convert to uint8 for drawing
-        img = (img * 255).astype(np.uint8).copy()
+        img = (img * 255).astype(np.uint8)
 
     for box, label in zip(boxes, labels):
         pts = bb2pts(box)
@@ -115,13 +140,14 @@ def postprocessing(outputs, iou_th=0.65):
     for output in outputs:
         removed_indices = []
         for i in range(len(output['boxes'])):
+            total_iou = 0
             for j in range(i, len(output['boxes'])):
                 if i == j:
                     continue
 
-                iou = calc_iou_bbox(output['boxes'][i], output['boxes'][j])
+                total_iou += calc_iou_bbox(output['boxes'][i], output['boxes'][j])
                 # remove box with lower score
-                if iou > iou_th:
+                if total_iou > iou_th:
                     if output['scores'][i] > output['scores'][j]:
                         removed_indices.append(j)
                     else:
