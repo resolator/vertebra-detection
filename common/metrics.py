@@ -6,6 +6,24 @@ from .utils import calc_iou_bbox
 
 
 def extract_tfpn(output, target, iou_th=0.5):
+    """Extract information for metrics calculation.
+
+    Parameters
+    ----------
+    output : List
+        Outputs from FasterRCNN in evaluation mode.
+    target : List
+        Same as outputs but ground truth.
+    iou_th : float
+        Threshold for match GT and PD boxes.
+
+    Returns
+    -------
+    tuple
+        True positives, false positives, false negatives,
+        matched GT labels and scores.
+
+    """
     tp, fp, fn = 0, 0, 0
     y_true, y_score = [], []
     for i, gt_box in enumerate(target['boxes']):
@@ -15,21 +33,19 @@ def extract_tfpn(output, target, iou_th=0.5):
                 y_true.append(target['labels'][i])
                 y_score.append(output['scores'][j])
                 if target['labels'][i] == output['labels'][j]:
-                    if tp_found:
-                        fp += 1
-                    else:
+                    if not tp_found:
                         tp_found = True
                         tp += 1
                 else:
                     fn += 1
-            else:
-                fp += 1
+
+        fp = len(target['boxes']) - tp
 
     return tp, fp, fn, y_true, y_score
 
 
 def calc_metrics(output, target, iou_th=0.5):
-    """
+    """Calculate metrics.
 
     Parameters
     ----------
