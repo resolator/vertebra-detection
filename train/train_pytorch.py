@@ -5,9 +5,10 @@ import sys
 import configargparse
 
 import numpy as np
+import albumentations as alb
 
-from math import isfinite, isnan
 from tqdm import tqdm
+from math import isfinite, isnan
 
 import torch
 import torch.optim as optim
@@ -15,11 +16,11 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from torchvision.models.detection import fasterrcnn_resnet50_fpn, faster_rcnn
 
-from vertebra_dataset import VertebraDataset, get_transforms
+from vertebra_dataset import VertebraDataset, ToTensor
 
 sys.path.append(os.path.join(sys.path[0], '../'))
-from common.utils import draw_bboxes, postprocessing
 from common.metrics import calc_metrics
+from common.utils import draw_bboxes, postprocessing
 
 
 def get_args():
@@ -48,23 +49,37 @@ def get_args():
                         help='Enable LR decay.')
     parser.add_argument('--weight-decay', type=float, default=1e-4,
                         help='Weight decay for optimizer.')
-    parser.add_argument('--crop-factor', type=float, default=0.1,
-                        help='Crop factor part of image\'s top-left.')
-    parser.add_argument('--center-crop', action='store_true',
-                        help='Use central crop instead of bottom right crop.')
+    parser.add_argument('--perspective-range', type=float, nargs=2,
+                        default=[0.05, 0.15],
+                        help='Warp perspective range.')
+    parser.add_argument('--perspective-prob', type=float, default=0.75,
+                        help='Probability of applying warp perspective.')
+    parser.add_argument('--resize-size', type=int, nargs=2,
+                        default=[384, 384],
+                        help='Resize images to this size.')
+    parser.add_argument('--rotate-range', type=int, nargs=2,
+                        default=[-20, 20],
+                        help='Rotate image on random angle in range.')
+    parser.add_argument('--rotate-prob', type=float, default=0.75,
+                        help='Probability of applying random rotation.')
+    parser.add_argument('--center-crop-size', type=int, nargs=2,
+                        default=[330, 330],
+                        help='Size of center-cropped image.')
     parser.add_argument('--h-flip-prob', type=float, default=0.5,
                         help='Probability for horizontal flip.')
     parser.add_argument('--v-flip-prob', type=float, default=0.5,
                         help='Probability for vertical flip.')
+    parser.add_argument('--brightness-contrast', type=float, default=0.1,
+                        help='Randomly change brightness and contrast '
+                             'of the input image.')
+    parser.add_argument('--brightness-contrast-prob', type=float, default=0.75,
+                        help='Probability for applying brightness '
+                             'and contrast.')
     parser.add_argument('--mean', nargs=3, type=float,
-                        default=[0.15790240544637338,
-                                 0.1552071038276819,
-                                 0.14960934155744626],
+                        default=[0.485, 0.456, 0.406],
                         help='Mean for normalization.')
     parser.add_argument('--std', nargs=3, type=float,
-                        default=[0.17360058569013256,
-                                 0.1712755483385491,
-                                 0.16214239162025465],
+                        default=[0.229, 0.224, 0.225],
                         help='STD for normalization.')
     parser.add_argument('--loader-workers', type=int, default=1,
                         help='Num of threads for DataLoaders.')
@@ -72,6 +87,9 @@ def get_args():
                         help='Use pretrained FasterRCNN from torchvision.')
     parser.add_argument('--optimizer', choices=['adam', 'sgd'], default='sgd',
                         help='Optimizer.')
+    parser.add_argument('--min-visibility', type=float, default=0.4,
+                        help='Minimum fraction of area for a bounding box '
+                             'after augmentation to remain this box in list.')
 
     args = parser.parse_args()
 
@@ -120,11 +138,12 @@ def train_one_epoch(model,
     """
     model.train()
 
-    cycle = tqdm(loader, desc=f'Training {ep}')
     ep_losses = []
-    for images, targets in cycle:
-        images = list(image.to(device) for image in images)
-        targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
+    cycle = tqdm(loader, desc=f'Training {ep}')
+    for batch in cycle:
+        images = [x['image'].to(device) for x in batch]
+        targets = [{'boxes': x['bboxes'].to(device),
+                    'labels': x['labels'].to(device)} for x in batch]
 
         loss_dict = model(images, targets)
         losses = sum(loss for loss in loss_dict.values())
@@ -202,16 +221,15 @@ def evaluate_one_epoch(model,
 
     batch_num = np.random.randint(0, len(loader) - 1)
     metrics = [[], [], [], []]
-    for idx, (images, targets) in tqdm(
-            enumerate(loader), desc=f'Testing {ep}', total=len(loader)):
-        images = list(img.to(device) for img in images)
-        outputs = model(images)
+    cycle = tqdm(loader, desc=f'Testing {ep}', total=len(loader))
+    for idx, batch in enumerate(cycle):
+        images = [x['image'].to(device) for x in batch]
+        targets = [{'boxes': x['bboxes'].to(cpu_device),
+                    'labels': x['labels'].to(cpu_device)} for x in batch]
 
+        outputs = model(images)
         outputs = [{k: v.to(cpu_device).numpy()
                     for k, v in t.items()} for t in outputs]
-        targets = [{k: v.to(cpu_device).numpy()
-                    for k, v in t.items()} for t in targets]
-
         outputs = postprocessing(outputs, iou_th_postprocessing)
 
         # metrics collecting
@@ -243,7 +261,6 @@ def evaluate_one_epoch(model,
             writer.add_image('Test/pd_image', pd_img, ep, dataformats='HWC')
 
     # metrics preparation and dumping
-
     metrics_for_save = ['last']
     for idx, (m_name, m, m_best) in enumerate(
             zip(m_names, metrics, best_metrics)):
@@ -268,14 +285,32 @@ def main():
     writer = SummaryWriter(logs_path)
 
     # data processing preparation
-    train_transforms, test_transforms = get_transforms(
-        crop_factor=args.crop_factor,
-        h_flip_prob=args.h_flip_prob,
-        v_flip_prob=args.v_flip_prob,
-        mean=args.mean,
-        std=args.std,
-        center_crop=args.center_crop
+    bbox_params = alb.BboxParams(
+        format='pascal_voc',
+        min_visibility=args.min_visibility,
+        label_fields=['labels']
     )
+
+    train_transforms = alb.Compose([
+        alb.IAAPerspective(args.perspective_range, keep_size=False,
+                           p=args.perspective_prob),
+        alb.Resize(args.resize_size[0], args.resize_size[1]),
+        alb.Rotate(args.rotate_range, p=args.rotate_prob),
+        alb.RandomRotate90(),
+        alb.HorizontalFlip(p=args.h_flip_prob),
+        alb.VerticalFlip(p=args.v_flip_prob),
+        alb.CenterCrop(args.center_crop_size[0], args.center_crop_size[1]),
+        alb.RandomBrightness(args.brightness_contrast_prob,
+                             p=args.brightness_contrast_prob),
+        ToTensor(normalize={'mean': args.mean, 'std': args.std})
+    ], bbox_params=bbox_params)
+
+    test_transforms = alb.Compose([
+        alb.Resize(args.resize_size[0], args.resize_size[1]),
+        alb.CenterCrop(args.center_crop_size[0], args.center_crop_size[1]),
+        ToTensor(normalize={'mean': args.mean, 'std': args.std})
+    ], bbox_params=bbox_params)
+
     train_ds = VertebraDataset(args.train_json, transform=train_transforms)
     test_ds = VertebraDataset(args.test_json, transform=test_transforms)
 

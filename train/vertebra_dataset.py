@@ -1,56 +1,35 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import cv2
 import json
-from PIL import Image
 
+import albumentations.pytorch as alb_pytorch
+from albumentations import BasicTransform
+
+import torch
 import torchvision
 from torch.utils.data import Dataset
-import custom_transforms as custom_t
+from torchvision.transforms import functional as F
 
 
-def get_transforms(crop_factor,
-                   h_flip_prob,
-                   v_flip_prob,
-                   mean,
-                   std,
-                   center_crop=True):
-    """Make train/test transforms.
+class ToTensor(BasicTransform):
+    """Simple wrapper for processing custom input."""
+    def __init__(self, normalize=None):
+        super(ToTensor, self).__init__(always_apply=True, p=1)
+        self.alb_totensor = alb_pytorch.ToTensor()
+        self.normalize = normalize
 
-    Parameters
-    ----------
-    crop_factor : float
-        Factor for determinate the target size (how much width and height we
-        should remove) Must be in range (0; 1).
-    h_flip_prob : float
-        Probability of flip.
-    v_flip_prob : float
-        Probability of flip.
-    std : List
-        Standart deviation for every channel (RGB order).
-    mean : List
-        Mean for every channel (RGB order).
-    center_crop : bool
-        Use center crop instead of bottom-right crop.
+    def __call__(self, force_apply=False, **kwargs):
+        sample = {'image': self.alb_totensor(**kwargs)['image'],
+                  'bboxes': torch.tensor(kwargs['bboxes'], dtype=torch.float),
+                  'labels': torch.tensor(kwargs['labels'], dtype=torch.int64)}
+        if self.normalize is not None:
+            sample['image'] = F.normalize(sample['image'], **self.normalize)
 
-    Returns
-    -------
-    tuple
-        Composed train and test transform.
+        return sample
 
-    """
-    train_transforms = torchvision.transforms.Compose([
-        custom_t.Crop(crop_factor, center_crop=center_crop),
-        custom_t.RandomHorizontalFlip(h_flip_prob),
-        custom_t.RandomVerticalFlip(v_flip_prob),
-        custom_t.ToTensor(),
-        custom_t.Normalize(mean=mean, std=std)
-    ])
-    test_transforms = torchvision.transforms.Compose([
-        custom_t.Crop(crop_factor, center_crop=center_crop),
-        custom_t.ToTensor(),
-        custom_t.Normalize(mean=mean, std=std),
-    ])
-    return train_transforms, test_transforms
+    def get_transform_init_args_names(self):
+        return ['normalize']
 
 
 class VertebraDataset(Dataset):
@@ -68,7 +47,10 @@ class VertebraDataset(Dataset):
         with open(json_path) as f:
             self.samples = json.load(f)
 
-        self.transform = transform
+        if transform is None:
+            self.transform = ToTensor()
+        else:
+            self.transform = transform
 
     def __len__(self):
         return len(self.samples)
@@ -76,17 +58,12 @@ class VertebraDataset(Dataset):
     def __getitem__(self, idx):
         labels = [int(x['label']) for x in self.samples[idx]['annotation']]
         bboxes = [x['bbox'] for x in self.samples[idx]['annotation']]
-        img = Image.open(self.samples[idx]['img_path'])
-        sample = {'img': img, 'bboxes': bboxes, 'labels': labels}
+        img = cv2.imread(self.samples[idx]['img_path'])
+        sample = {'image': img, 'bboxes': bboxes, 'labels': labels}
+        sample = self.transform(**sample)
 
-        if self.transform is not None:
-            sample = self.transform(sample)
-        else:
-            sample = custom_t.ToTensor()(sample)
-
-        return sample['img'], {'boxes': sample['bboxes'],
-                               'labels': sample['labels']}
+        return sample
 
     @staticmethod
     def collate_fn(batch):
-        return tuple(zip(*batch))
+        return batch
