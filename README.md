@@ -1,4 +1,4 @@
-# vertebra-classification
+# vertebra-detection
 
 
 ## Быстрый старт
