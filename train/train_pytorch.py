@@ -219,7 +219,7 @@ def evaluate_one_epoch(model,
     cpu_device = torch.device('cpu')
     model.eval()
 
-    batch_num = np.random.randint(0, len(loader) - 1)
+    batch_num = np.random.randint(0, len(loader))
     metrics = [[], [], [], []]
     cycle = tqdm(loader, desc=f'Testing {ep}', total=len(loader))
     for idx, batch in enumerate(cycle):
@@ -239,7 +239,7 @@ def evaluate_one_epoch(model,
 
         # draw random image
         if idx == batch_num:
-            sample_idx = np.random.randint(0, len(images) - 1)
+            sample_idx = np.random.randint(0, len(images))
 
             gt_img = draw_bboxes(
                 images[sample_idx],
