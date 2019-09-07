@@ -50,14 +50,17 @@ def draw_bboxes(img, boxes, labels, shifted_labels=False, mean=None, std=None):
             t.mul_(s).add_(m)
 
         # convert to cv2 format
-        img = img.cpu().numpy()  # .transpose((1, 2, 0))
+        img = img.cpu().numpy().transpose((1, 2, 0))
 
         # convert to uint8 for drawing
         img = np.clip(img * 255, 0, 255).astype(np.uint8)
 
     for box, label in zip(boxes, labels):
         if shifted_labels:
-            color = (0, 0, 255) if label == 2 else (0, 255, 0)
+            if from_tensor:
+                color = (255, 0, 0) if label == 2 else (0, 255, 0)
+            else:
+                    color = (0, 0, 255) if label == 2 else (0, 255, 0)
         else:
             color = (0, 0, 255) if label else (0, 255, 0)
 
