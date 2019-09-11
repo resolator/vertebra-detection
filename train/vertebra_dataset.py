@@ -1,35 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import os
 import cv2
+import sys
 import json
 
-import albumentations.pytorch as alb_pytorch
-from albumentations import BasicTransform
-
-import torch
 import torchvision
 from torch.utils.data import Dataset
-from torchvision.transforms import functional as F
 
-
-class ToTensor(BasicTransform):
-    """Simple wrapper for processing custom input."""
-    def __init__(self, normalize=None):
-        super(ToTensor, self).__init__(always_apply=True, p=1)
-        self.alb_totensor = alb_pytorch.ToTensor()
-        self.normalize = normalize
-
-    def __call__(self, force_apply=False, **kwargs):
-        sample = {'image': self.alb_totensor(**kwargs)['image'],
-                  'bboxes': torch.tensor(kwargs['bboxes'], dtype=torch.float),
-                  'labels': torch.tensor(kwargs['labels'], dtype=torch.int64)}
-        if self.normalize is not None:
-            sample['image'] = F.normalize(sample['image'], **self.normalize)
-
-        return sample
-
-    def get_transform_init_args_names(self):
-        return ['normalize']
+sys.path.append(os.path.join(sys.path[0], '../'))
+from common.transforms import ToTensor
 
 
 class VertebraDataset(Dataset):

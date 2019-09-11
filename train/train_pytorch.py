@@ -16,9 +16,10 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from torchvision.models.detection import fasterrcnn_resnet50_fpn, faster_rcnn
 
-from vertebra_dataset import VertebraDataset, ToTensor
+from vertebra_dataset import VertebraDataset
 
 sys.path.append(os.path.join(sys.path[0], '../'))
+from common.transforms import ToTensor, get_test_transform
 from common.metrics import calc_metrics
 from common.utils import draw_bboxes, postprocessing
 
@@ -142,7 +143,7 @@ def train_one_epoch(model,
     cycle = tqdm(loader, desc=f'Training {ep}')
     for batch in cycle:
         images = [x['image'].to(device) for x in batch]
-        targets = [{'boxes': x['bboxes'].to(device),
+        targets = [{'bboxes': x['bboxes'].to(device),
                     'labels': x['labels'].to(device)} for x in batch]
 
         loss_dict = model(images, targets)
@@ -285,13 +286,17 @@ def main():
     writer = SummaryWriter(logs_path)
 
     # data processing preparation
-    bbox_params = alb.BboxParams(
-        format='pascal_voc',
-        min_visibility=args.min_visibility,
-        label_fields=['labels']
+    test_transform , bbox_params = get_test_transform(
+        args.resize_size,
+        args.center_crop_size,
+        args.min_visibility
     )
+    test_transform = alb.Compose([
+        test_transform,
+        ToTensor(normalize={'mean': args.mean, 'std': args.std})
+    ])
 
-    train_transforms = alb.Compose([
+    train_transform = alb.Compose([
         alb.IAAPerspective(args.perspective_range, keep_size=False,
                            p=args.perspective_prob),
         alb.Resize(args.resize_size[0], args.resize_size[1]),
@@ -305,14 +310,8 @@ def main():
         ToTensor(normalize={'mean': args.mean, 'std': args.std})
     ], bbox_params=bbox_params)
 
-    test_transforms = alb.Compose([
-        alb.Resize(args.resize_size[0], args.resize_size[1]),
-        alb.CenterCrop(args.center_crop_size[0], args.center_crop_size[1]),
-        ToTensor(normalize={'mean': args.mean, 'std': args.std})
-    ], bbox_params=bbox_params)
-
-    train_ds = VertebraDataset(args.train_json, transform=train_transforms)
-    test_ds = VertebraDataset(args.test_json, transform=test_transforms)
+    train_ds = VertebraDataset(args.train_json, transform=train_transform)
+    test_ds = VertebraDataset(args.test_json, transform=test_transform)
 
     train_loader = DataLoader(
         dataset=train_ds,
@@ -383,8 +382,9 @@ def main():
 
     # main train cycle
     while ep != epochs:
-        train_one_epoch(model, optimizer, train_loader, device, ep, writer,
-                        lr_s)
+        train_one_epoch(
+            model, optimizer, train_loader, device, ep, writer, lr_s
+        )
         save_model = evaluate_one_epoch(
             model,
             test_loader,

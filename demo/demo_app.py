@@ -5,15 +5,18 @@ import cv2
 import sys
 import json
 import argparse
+
 import numpy as np
+import albumentations as alb
+
 from tqdm import tqdm
-from PIL import Image
 from math import isnan
 
 import torch
-from torchvision import transforms, models
+from torchvision import models
 
 sys.path.append(os.path.join(sys.path[0], '../'))
+from common.transforms import get_test_transform, ToTensor
 from common.utils import postprocessing, draw_bboxes
 from common.metrics import calc_metrics
 
@@ -74,10 +77,15 @@ def main():
         model.to(device)
         model.eval()
 
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize(ckpt['args'].mean, ckpt['args'].std)
-        ])
+        # create transform for visualization only (without ToTensor)
+        vis_transform, _ = get_test_transform(
+            ckpt['args'].resize_size,
+            ckpt['args'].center_crop_size,
+            ckpt['args'].min_visibility
+        )
+        to_tensor_transform = ToTensor(
+            normalize={'mean': ckpt['args'].mean, 'std': ckpt['args'].std}
+        )
 
         m_names = ['Precision', 'Recall', 'F1', 'mAP']
         metrics = [[], [], [], []]
@@ -90,34 +98,50 @@ def main():
                 else:
                     img_path = sample
 
-                img = Image.open(img_path)
-                prepared_img = transform(img).to(device)
+                img = cv2.imread(img_path)
+                if markup:
+                    sample = {
+                        'image': img,
+                        'bboxes': [x['bbox'] for x in sample['annotation']],
+                        'labels': [int(x['label'])
+                                   for x in sample['annotation']]
+                    }
+                else:
+                    sample = {
+                        'img': img,
+                        'bboxes': [],
+                        'labels': []
+                    }
 
-                output = model([prepared_img])
+                # prepare image for visualization
+                sample = vis_transform(**sample)
+                img = sample['image'].copy()
+
+                # prepare sample for model applying
+                sample = to_tensor_transform(**sample)
+                sample['image'] = sample['image'].to(device)
+
+                # applying model
+                output = model([sample['image']])
                 output = {k: v.to(cpu_device).numpy()
                           for k, v in output[0].items()}
                 output = postprocessing([output], iou_th=args.iou_th)[0]
 
-                img = cv2.imread(img_path)
-                drawn_img = draw_bboxes(img, output['boxes'], output['labels'],
-                                        shifted_labels=True)
+                drawn_img = draw_bboxes(
+                    img.copy(), output['boxes'], output['labels'],
+                    shifted_labels=True
+                )
 
                 # evaluate if markup file was passed
                 if markup:
-                    target = {
-                        'boxes': [x['bbox'] for x in sample['annotation']],
-                        'labels': [int(x['label'])
-                                   for x in sample['annotation']]
-                    }
-                    cur_m = np.array(calc_metrics(output, target))
+                    cur_m = np.array(calc_metrics(output, sample))
                     [m.append(x)
                      for x, m in zip(cur_m, metrics) if not isnan(x)]
 
-                    img = cv2.imread(img_path)
                     gt_drawn_img = draw_bboxes(
                         img,
-                        target['boxes'],
-                        target['labels'],
+                        sample['bboxes'],
+                        sample['labels'],
                         shifted_labels=True
                     )
                     drawn_img = np.concatenate([gt_drawn_img, drawn_img],

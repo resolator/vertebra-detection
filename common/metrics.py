@@ -26,7 +26,7 @@ def extract_tfpn(output, target, iou_th=0.5):
     """
     tp, fp, fn = 0, 0, 0
     y_true, y_score = [], []
-    for i, gt_box in enumerate(target['boxes']):
+    for i, gt_box in enumerate(target['bboxes']):
         tp_found = False
         for j, pd_box in enumerate(output['boxes']):
             if calc_iou_bbox(gt_box, pd_box) >= iou_th:
@@ -39,7 +39,7 @@ def extract_tfpn(output, target, iou_th=0.5):
                 else:
                     fn += 1
 
-        fp = len(target['boxes']) - tp
+        fp = len(target['bboxes']) - tp
 
     return tp, fp, fn, y_true, y_score
 
@@ -49,9 +49,9 @@ def calc_metrics(output, target, iou_th=0.5):
 
     Parameters
     ----------
-    output : List
+    output : Dict
         Outputs from FasterRCNN in evaluation mode.
-    target : List
+    target : Dict
         Same as outputs but ground truth.
     iou_th : float
         Threshold for match GT and PD boxes.
