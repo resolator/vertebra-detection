@@ -133,17 +133,27 @@ python3 demo/demo_app.py --images PATH_TO_FOLDER_WITH_IMAGES_ONLY --model-path d
 `train/train_pytorch.cfg`. 
 
 Особенности процесса обучения:
-- Аугментация: случайный flip по `x` и `y`, центральный кроп
+- Аугментация (1 вариант): случайный flip по `x` и `y`, центральный кроп
+- Аугментация (2 вариант):
 - Пост обработка фильтрует дублирующиеся bounding box'ы
 - Оптимизированный расчет метрик
 
 
-#### Процесс обучения лучшей модели:
+#### History or training process:
 
-![train_process](content/train_process.png?raw=true)
+##### augmentation 1
+
+![train_process_aug1](content/train_process_aug1.png?raw=true)
+
+##### augmentation 2
+
+![train_process_aug2](content/train_process_aug2.png?raw=true)
 
 
-#### Итоговые метрики
+
+#### Final metrics
+
+##### Results for augmentation 1
 
 |           | train.json | test.json | markup.json |
 |-----------|------------|-----------|-------------|
@@ -153,15 +163,25 @@ python3 demo/demo_app.py --images PATH_TO_FOLDER_WITH_IMAGES_ONLY --model-path d
 | mAP       | 0.571      | 0.679     | 0.605       |
 
 
-#### Примеры предсказаний
+##### Results for augmentation 2
 
-На test выборке (слева - GT, справа - PD):
+|           | train.json | test.json | markup.json |
+|-----------|------------|-----------|-------------|
+| Precision | 0.998      | 0.772     | 0.923       |
+| Recall    | 0.998      | 0.816     | 0.937       |
+| F1        | 0.998      | 0.789     | 0.928       |
+| mAP       | 0.578      | 0.726     | 0.625       |
+
+
+#### Prediction examples (augmentation 1)
+
+From test.json (left - GT, right - PD):
 
 ![img_00292.jpg](content/img_00292.jpg?raw=true)
 ![img_00357.jpg](content/img_00357.jpg?raw=true)
 ![img_01200.jpg](content/img_01200.jpg?raw=true)
 
-На train выборке (слева - GT, справа - PD):
+From train.sjon (left - GT, right - PD):
 
 ![img_00632.jpg](content/img_00632.jpg?raw=true)
 ![img_00721.jpg](content/img_00721.jpg?raw=true)
