@@ -1,15 +1,11 @@
 # vertebra-detection
 
 
-## Быстрый старт
+## Fast start
 
-- Установите зависимости используя следующуе команды:
-```bash
-sudo apt-get install git-lfs
-sudo -H pip3 install -r requirements.txt
-```
+- Install dependencies by running the `install.sh` from the repository's root.
 
-- Используйте скрипт `demo_app.py` на своих данных:
+- Run `demo_app.py` on your data:
 ```bash
 python3 demo/demo_app.py --images PATH_TO_FOLDER_WITH_IMAGES_ONLY --model-path data/model.pth
 ```
