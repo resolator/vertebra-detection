@@ -7,7 +7,6 @@ import json
 import argparse
 
 import numpy as np
-import albumentations as alb
 
 from tqdm import tqdm
 from math import isnan
@@ -18,7 +17,7 @@ from torchvision import models
 sys.path.append(os.path.join(sys.path[0], '../'))
 from common.transforms import get_test_transform, ToTensor
 from common.utils import postprocessing, draw_bboxes
-from common.metrics import calc_metrics
+from common.evaluator import Evaluator
 
 
 def get_args():
@@ -49,10 +48,14 @@ def main():
     args = get_args()
 
     markup = False
+    evaluator = None
     if os.path.isfile(args.images):
+        markup = True
+        evaluator = Evaluator()
+
         with open(args.images) as f:
             samples = json.load(f)
-            markup = True
+
     else:
         samples = [os.path.join(args.images, path)
                    for path in os.listdir(args.images)]
@@ -87,8 +90,6 @@ def main():
             normalize={'mean': ckpt['args'].mean, 'std': ckpt['args'].std}
         )
 
-        m_names = ['Precision', 'Recall', 'F1', 'mAP']
-        metrics = [[], [], [], []]
         cpu_device = torch.device('cpu')
         with torch.no_grad():
             for sample in tqdm(samples, desc='Predicting'):
@@ -134,9 +135,8 @@ def main():
 
                 # evaluate if markup file was passed
                 if markup:
-                    cur_m = np.array(calc_metrics(output, sample))
-                    [m.append(x)
-                     for x, m in zip(cur_m, metrics) if not isnan(x)]
+                    sample['boxes'] = sample['bboxes']
+                    evaluator.collect_stats([output], [sample])
 
                     gt_drawn_img = draw_bboxes(
                         img,
@@ -165,8 +165,9 @@ def main():
         # calculate metrics if markup file was passed
         if markup:
             print('\nMetrics for model:', os.path.basename(model_path))
-            for m_name, m in zip(m_names, metrics):
-                print(f'{m_name}: {np.mean(m)}')
+            metrics = evaluator.calculate_metrics()
+            for name, value in metrics.items():
+                print(f'{name}: {value}')
 
 
 if __name__ == '__main__':
