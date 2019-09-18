@@ -8,7 +8,7 @@ import numpy as np
 import albumentations as alb
 
 from tqdm import tqdm
-from math import isfinite, isnan
+from math import isfinite
 
 import torch
 import torch.optim as optim
@@ -20,7 +20,7 @@ from vertebra_dataset import VertebraDataset
 
 sys.path.append(os.path.join(sys.path[0], '../'))
 from common.transforms import ToTensor, get_test_transform
-from common.metrics import calc_metrics
+from common.evaluator import Evaluator
 from common.utils import draw_bboxes, postprocessing
 
 
@@ -143,7 +143,7 @@ def train_one_epoch(model,
     cycle = tqdm(loader, desc=f'Training {ep}')
     for batch in cycle:
         images = [x['image'].to(device) for x in batch]
-        targets = [{'bboxes': x['bboxes'].to(device),
+        targets = [{'boxes': x['bboxes'].to(device),
                     'labels': x['labels'].to(device)} for x in batch]
 
         loss_dict = model(images, targets)
@@ -174,11 +174,10 @@ def evaluate_one_epoch(model,
                        device,
                        ep,
                        writer,
-                       m_names,
                        best_metrics,
                        std,
                        mean,
-                       metrics_iou_th=0.5,
+                       evaluator,
                        iou_th_postprocessing=0.65):
     """Run model on test dataset and calculate metrics.
 
@@ -198,16 +197,14 @@ def evaluate_one_epoch(model,
         Current epoch number.
     writer : SummaryWriter
         Tensorboard writter.
-    m_names : List
-        Names of metrics for tensorboard .
-    best_metrics : List
-        List with best values of metrics.
+    best_metrics : dict
+        Best values of metrics.
     std : List
         Standart deviation for every channel (RGB order).
     mean : List
         Mean for every channel (RGB order).
-    metrics_iou_th : float
-        Threshold for match gt_box with pd_box.
+    evaluator : Evaluator
+        Metrics calculator.
     iou_th_postprocessing : float
         Threshold for filter predicted boxes.
 
@@ -221,7 +218,6 @@ def evaluate_one_epoch(model,
     model.eval()
 
     batch_num = np.random.randint(0, len(loader))
-    metrics = [[], [], [], []]
     cycle = tqdm(loader, desc=f'Testing {ep}', total=len(loader))
     for idx, batch in enumerate(cycle):
         images = [x['image'].to(device) for x in batch]
@@ -234,9 +230,7 @@ def evaluate_one_epoch(model,
         outputs = postprocessing(outputs, iou_th_postprocessing)
 
         # metrics collecting
-        for output, target in zip(outputs, targets):
-            cur_m = calc_metrics(output, target, iou_th=metrics_iou_th)
-            [m.append(x) for x, m in zip(cur_m, metrics) if not isnan(x)]
+        evaluator.collect_stats(outputs, targets)
 
         # draw random image
         if idx == batch_num:
@@ -262,16 +256,15 @@ def evaluate_one_epoch(model,
             writer.add_image('Test/pd_image', pd_img, ep, dataformats='HWC')
 
     # metrics preparation and dumping
+    metrics = evaluator.calculate_metrics()
     metrics_for_save = ['last']
-    for idx, (m_name, m, m_best) in enumerate(
-            zip(m_names, metrics, best_metrics)):
-        m = np.mean(m)
-        print(f'Test mean {m_name}: {m} (best is {m_best})')
-        writer.add_scalar('Test/mean_' + m_name, m, ep)
+    for name, value in metrics.items():
+        print(f'Test {name}: {value} (best is {best_metrics[name]})')
+        writer.add_scalar('Test/' + name, value, ep)
 
-        if m > m_best:
-            best_metrics[idx] = m
-            metrics_for_save.append(m_name)
+        if value >= best_metrics[name]:
+            best_metrics[name] = value
+            metrics_for_save.append(name)
 
     print()
     return metrics_for_save
@@ -373,9 +366,11 @@ def main():
             optimizer, warmup_iters, warmup_factor
         )
 
+    # metrics calculator
+    evaluator = Evaluator()
+
     # metrics storage
-    m_names = ['precision', 'recall', 'f1', 'AP']
-    best_metrics = np.zeros(len(m_names))
+    best_metrics = {key: 0 for key in evaluator.metrics_names}
 
     models_path = os.path.join(args.save_to, 'models')
     os.makedirs(models_path, exist_ok=True)
@@ -391,10 +386,10 @@ def main():
             device,
             ep,
             writer,
-            m_names,
             best_metrics,
             args.std,
-            args.mean
+            args.mean,
+            evaluator
         )
 
         for m_name in save_model:
