@@ -1,8 +1,8 @@
 #!/bin/bash
-REPODIR="$(cd "$(dirname "$0")"; pwd -P)"
-cd "$REPODIR";
+REPODIR="$(cd "$(dirname "$0")" || exit; pwd -P)"
+cd "$REPODIR" || exit;
 
 sudo apt update
-sudo apt install git-lfs python3-pip
+sudo apt install git-lfs python3-pip libgtk2.0-dev pkg-config
 git-lfs pull
 sudo -H pip3 install -r requirements.txt
