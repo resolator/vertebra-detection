@@ -9,7 +9,6 @@ import argparse
 import numpy as np
 
 from tqdm import tqdm
-from math import isnan
 
 import torch
 from torchvision import models
@@ -109,7 +108,7 @@ def main():
                     }
                 else:
                     sample = {
-                        'img': img,
+                        'image': img,
                         'bboxes': [],
                         'labels': []
                     }
