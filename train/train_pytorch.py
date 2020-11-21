@@ -298,8 +298,8 @@ def main():
         alb.HorizontalFlip(p=args.h_flip_prob),
         alb.VerticalFlip(p=args.v_flip_prob),
         alb.CenterCrop(args.center_crop_size[0], args.center_crop_size[1]),
-        alb.RandomBrightness(args.brightness_contrast_prob,
-                             p=args.brightness_contrast_prob),
+        alb.RandomBrightnessContrast(args.brightness_contrast,
+                                     p=args.brightness_contrast_prob),
         ToTensor(normalize={'mean': args.mean, 'std': args.std})
     ], bbox_params=bbox_params)
 
